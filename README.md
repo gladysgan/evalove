@@ -15,6 +15,7 @@ Open `design-system.html` to view the UI design system.
 The prototype maps the PRD flow into a static interactive workbench:
 
 - Dataset Version
+- Workflow Demo
 - Experiment
 - Variant Run
 - Case Comparison

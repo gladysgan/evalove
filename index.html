@@ -933,6 +933,217 @@
       color: var(--muted);
     }
 
+    .workflow-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.45fr);
+      gap: 18px;
+    }
+
+    .workflow-steps {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .workflow-step {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      text-align: left;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .workflow-step:hover {
+      transform: translateY(-1px);
+    }
+
+    .workflow-step.is-active {
+      border-color: var(--status-processing);
+      background: #edf5ff;
+    }
+
+    .workflow-step.is-done {
+      border-color: #b7eb8f;
+      background: #f6ffed;
+    }
+
+    .workflow-step.is-error {
+      border-color: #ffccc7;
+      background: #fff1f0;
+    }
+
+    .workflow-index,
+    .status-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .workflow-index {
+      width: 28px;
+      height: 28px;
+      background: var(--status-default);
+      color: #3f3f3f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .workflow-step.is-active .workflow-index {
+      background: var(--status-processing);
+      color: #ffffff;
+    }
+
+    .workflow-step.is-done .workflow-index {
+      background: var(--status-success);
+      color: #ffffff;
+    }
+
+    .workflow-step.is-error .workflow-index {
+      background: var(--status-error);
+      color: #ffffff;
+    }
+
+    .workflow-copy {
+      min-width: 0;
+    }
+
+    .workflow-copy strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .workflow-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .workflow-state {
+      min-width: 92px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .workflow-action {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .workflow-current {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .workflow-current .rail-label {
+      margin-bottom: 8px;
+    }
+
+    .workflow-current h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .workflow-current p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .workflow-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--steel);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      min-height: 38px;
+      margin: 0;
+      padding: 10px 11px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .field textarea {
+      min-height: 72px;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: var(--acid);
+      box-shadow: 0 0 0 3px rgba(38, 115, 221, 0.12);
+    }
+
+    .field.has-error input,
+    .field.has-error textarea {
+      border-color: var(--status-error);
+      box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.1);
+    }
+
+    .field-error {
+      min-height: 16px;
+      color: var(--status-error);
+      font-size: 12px;
+    }
+
+    .workflow-controls,
+    .error-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .error-controls {
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .evidence-log {
+      display: grid;
+      gap: 10px;
+      max-height: 320px;
+      overflow: auto;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .evidence-log .log-line:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
     .toast {
       position: fixed;
       right: 22px;
@@ -972,7 +1183,8 @@
       .hero-grid,
       .two-col,
       .dataset-grid,
-      .report-grid {
+      .report-grid,
+      .workflow-layout {
         grid-template-columns: 1fr;
       }
 
@@ -1021,6 +1233,15 @@
         flex-direction: column;
       }
 
+      .workflow-step {
+        grid-template-columns: 32px 1fr;
+      }
+
+      .workflow-state {
+        grid-column: 2;
+        text-align: left;
+      }
+
       h1 {
         font-size: 52px;
       }
@@ -1040,10 +1261,11 @@
 
       <nav class="nav" aria-label="Sections">
         <button class="active" data-section="overview"><span class="symbol">01</span><span>总览</span><span class="count">Gate</span></button>
-        <button data-section="experiments"><span class="symbol">02</span><span>实验</span><span class="count">4</span></button>
-        <button data-section="review"><span class="symbol">03</span><span>评审队列</span><span class="count" id="queueCount">6</span></button>
-        <button data-section="datasets"><span class="symbol">04</span><span>数据集</span><span class="count">v3</span></button>
-        <button data-section="report"><span class="symbol">05</span><span>报告</span><span class="count">CSV</span></button>
+        <button data-section="workflow"><span class="symbol">02</span><span>流程演示</span><span class="count">Happy</span></button>
+        <button data-section="experiments"><span class="symbol">03</span><span>实验</span><span class="count">4</span></button>
+        <button data-section="review"><span class="symbol">04</span><span>评审队列</span><span class="count" id="queueCount">6</span></button>
+        <button data-section="datasets"><span class="symbol">05</span><span>数据集</span><span class="count">v3</span></button>
+        <button data-section="report"><span class="symbol">06</span><span>报告</span><span class="count">CSV</span></button>
       </nav>
 
       <div class="rail-card">
@@ -1123,6 +1345,76 @@
             <div class="metric"><div class="label">Variant Runs</div><strong id="runMetric">84</strong><small>baseline + candidate, latest attempt tracked</small></div>
             <div class="metric"><div class="label">Review Queue</div><strong id="reviewMetric">36/42</strong><small>6 comparisons still need attention</small></div>
             <div class="metric"><div class="label">Gate Rules</div><strong>6</strong><small>P0, regression, skip, not sure, runner, general</small></div>
+          </div>
+        </section>
+
+        <section class="section" id="workflow">
+          <div class="workflow-layout">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h2>User Happy Path Demo</h2>
+                  <p>从创建 release eval 到 gate 放行的完整演示；异常仅覆盖必填和格式输入错误。</p>
+                </div>
+                <span class="pill" id="workflowBadge">ready</span>
+              </div>
+              <div class="workflow-steps" id="workflowSteps" aria-label="Happy path workflow steps"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h3>Demo Console</h3>
+                  <p>使用默认值可直接播放 happy path，也可以手动触发简单输入错误。</p>
+                </div>
+              </div>
+              <div class="workflow-action">
+                <div class="workflow-current">
+                  <div class="rail-label">Current step</div>
+                  <h3 id="workflowTitle">Bind Dataset Version</h3>
+                  <p id="workflowDesc">选择已冻结的数据集版本，作为 baseline 和 candidate 的共同输入。</p>
+                </div>
+
+                <div class="workflow-form" aria-label="Workflow input form">
+                  <div class="field" data-field="dataset">
+                    <label for="demoDataset">Dataset Version</label>
+                    <input id="demoDataset" value="RG-v3" autocomplete="off" />
+                    <span class="field-error" id="demoDatasetError"></span>
+                  </div>
+                  <div class="field" data-field="experiment">
+                    <label for="demoExperiment">Experiment Name</label>
+                    <input id="demoExperiment" value="Release Eval / MY image relayout" autocomplete="off" />
+                    <span class="field-error" id="demoExperimentError"></span>
+                  </div>
+                  <div class="field" data-field="candidate">
+                    <label for="demoCandidate">Candidate Version</label>
+                    <input id="demoCandidate" value="2026.05-r7" autocomplete="off" />
+                    <span class="field-error" id="demoCandidateError"></span>
+                  </div>
+                  <div class="field" data-field="comment">
+                    <label for="demoComment">Review Comment</label>
+                    <textarea id="demoComment">All required comparisons passed. No P0 failed, no not_sure left.</textarea>
+                    <span class="field-error" id="demoCommentError"></span>
+                  </div>
+                </div>
+
+                <div class="workflow-controls">
+                  <button class="btn signal" id="playWorkflow">播放 Happy Path</button>
+                  <button class="btn secondary" id="advanceWorkflow">下一步</button>
+                  <button class="btn secondary" id="resetWorkflow">重置</button>
+                </div>
+
+                <div class="error-controls" aria-label="Input error demos">
+                  <button class="btn secondary" id="demoMissingDataset">异常：缺少 Dataset</button>
+                  <button class="btn secondary" id="demoBadCandidate">异常：Candidate 格式错误</button>
+                  <button class="btn secondary" id="demoBlankComment">异常：Review Comment 为空</button>
+                </div>
+
+                <div class="evidence-log" id="workflowLog" aria-label="Workflow evidence log">
+                  <div class="log-line"><time>ready</time><span>Demo initialized with valid release eval inputs.</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1403,17 +1695,254 @@
       }
     ];
 
+    const workflowSteps = [
+      {
+        title: "Bind Dataset Version",
+        desc: "选择已冻结的数据集版本，固定评测输入。",
+        evidence: "Dataset RG-v3 locked for baseline and candidate."
+      },
+      {
+        title: "Create Experiment",
+        desc: "创建 release eval，绑定 skill、baseline 和 candidate。",
+        evidence: "Experiment record created with candidate 2026.05-r7."
+      },
+      {
+        title: "Run Baseline / Candidate",
+        desc: "同一批 cases 分别运行 baseline 与 candidate。",
+        evidence: "84 variant runs completed; attempt_no tracked."
+      },
+      {
+        title: "Generate Comparisons",
+        desc: "按 case 生成 baseline/candidate comparison。",
+        evidence: "42 comparisons generated and assigned to review queue."
+      },
+      {
+        title: "Submit Structured Review",
+        desc: "Reviewer 提交决策、rubric 和必要说明。",
+        evidence: "All required reviews submitted; no not_sure remaining."
+      },
+      {
+        title: "Gate Passed / Notify",
+        desc: "Gate 计算通过，生成报告并发送 Seatalk 预览。",
+        evidence: "Gate status passed; report and CSV are ready."
+      }
+    ];
+
     let activeCase = 0;
     let queueRemaining = queueCases.length;
+    let workflowStep = 0;
+    let workflowDone = false;
+    let workflowErrorStep = null;
+    let workflowTimers = [];
 
     const toast = document.getElementById("toast");
     const experimentRows = document.getElementById("experimentRows");
     const caseList = document.getElementById("caseList");
+    const workflowLog = document.getElementById("workflowLog");
+    const workflowBadge = document.getElementById("workflowBadge");
+
+    const workflowInputIds = {
+      dataset: "demoDataset",
+      experiment: "demoExperiment",
+      candidate: "demoCandidate",
+      comment: "demoComment"
+    };
 
     function showToast(message) {
       toast.textContent = message;
       toast.classList.add("show");
       window.setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function workflowStatus(index) {
+      if (workflowErrorStep === index) return "error";
+      if (workflowDone || index < workflowStep) return "success";
+      if (index === workflowStep) return "processing";
+      return "default";
+    }
+
+    function workflowStatusText(index) {
+      const status = workflowStatus(index);
+      if (status === "success") return "done";
+      if (status === "error") return "input error";
+      if (status === "processing") return "current";
+      return "waiting";
+    }
+
+    function renderWorkflow() {
+      const container = document.getElementById("workflowSteps");
+      container.innerHTML = workflowSteps.map((step, index) => {
+        const status = workflowStatus(index);
+        return `
+          <div class="workflow-step is-${status}">
+            <span class="workflow-index">${String(index + 1).padStart(2, "0")}</span>
+            <span class="workflow-copy">
+              <strong>${step.title}</strong>
+              <span>${step.desc}</span>
+            </span>
+            <span class="workflow-state">${workflowStatusText(index)}</span>
+          </div>
+        `;
+      }).join("");
+
+      const current = workflowSteps[Math.min(workflowStep, workflowSteps.length - 1)];
+      document.getElementById("workflowTitle").textContent = current.title;
+      document.getElementById("workflowDesc").textContent = current.desc;
+
+      workflowBadge.className = "pill";
+      if (workflowErrorStep !== null) {
+        workflowBadge.classList.add("block");
+        workflowBadge.textContent = "input error";
+      } else if (workflowDone) {
+        workflowBadge.classList.add("pass");
+        workflowBadge.textContent = "gate passed";
+      } else {
+        workflowBadge.classList.add("warn");
+        workflowBadge.textContent = "step " + String(workflowStep + 1) + " / " + String(workflowSteps.length);
+      }
+    }
+
+    function addWorkflowLog(message, tone = "default") {
+      const line = document.createElement("div");
+      line.className = "log-line";
+      line.innerHTML = `<time>${tone}</time><span>${message}</span>`;
+      workflowLog.prepend(line);
+    }
+
+    function setFieldError(field, message) {
+      const id = workflowInputIds[field];
+      const wrapper = document.querySelector(`[data-field="${field}"]`);
+      const error = document.getElementById(id + "Error");
+      wrapper.classList.toggle("has-error", Boolean(message));
+      error.textContent = message || "";
+    }
+
+    function clearWorkflowErrors() {
+      Object.keys(workflowInputIds).forEach((field) => setFieldError(field, ""));
+      workflowErrorStep = null;
+    }
+
+    function setHappyPathInputs() {
+      document.getElementById("demoDataset").value = "RG-v3";
+      document.getElementById("demoExperiment").value = "Release Eval / MY image relayout";
+      document.getElementById("demoCandidate").value = "2026.05-r7";
+      document.getElementById("demoComment").value = "All required comparisons passed. No P0 failed, no not_sure left.";
+    }
+
+    function validateWorkflowStep() {
+      clearWorkflowErrors();
+
+      if (workflowStep === 0) {
+        const dataset = document.getElementById("demoDataset").value.trim();
+        const experiment = document.getElementById("demoExperiment").value.trim();
+        const candidate = document.getElementById("demoCandidate").value.trim();
+        let valid = true;
+
+        if (!dataset) {
+          setFieldError("dataset", "Dataset Version 必填。");
+          valid = false;
+        } else if (!/^RG-v\d+$/i.test(dataset)) {
+          setFieldError("dataset", "格式应为 RG-v3 这类已冻结版本。");
+          valid = false;
+        }
+
+        if (!experiment) {
+          setFieldError("experiment", "Experiment Name 必填。");
+          valid = false;
+        } else if (experiment.length < 6) {
+          setFieldError("experiment", "名称太短，无法用于报告追踪。");
+          valid = false;
+        }
+
+        if (!candidate) {
+          setFieldError("candidate", "Candidate Version 必填。");
+          valid = false;
+        } else if (!/^2026\.\d{2}-r\d+$/i.test(candidate)) {
+          setFieldError("candidate", "格式应为 2026.05-r7。");
+          valid = false;
+        }
+
+        if (!valid) {
+          workflowErrorStep = 0;
+          addWorkflowLog("Input validation failed before creating experiment.", "error");
+          renderWorkflow();
+        }
+        return valid;
+      }
+
+      if (workflowStep === 4) {
+        const comment = document.getElementById("demoComment").value.trim();
+        if (!comment) {
+          setFieldError("comment", "Review Comment 必填，用于 gate evidence。");
+          workflowErrorStep = 4;
+          addWorkflowLog("Review submit blocked because comment is empty.", "error");
+          renderWorkflow();
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function advanceWorkflow(isAuto = false) {
+      if (workflowDone) return;
+      if (!validateWorkflowStep()) {
+        showToast("输入有误，已停在当前步骤。");
+        return;
+      }
+
+      addWorkflowLog(workflowSteps[workflowStep].evidence, "ok");
+
+      if (workflowStep >= workflowSteps.length - 1) {
+        workflowDone = true;
+        renderWorkflow();
+        showToast("Happy path completed. Gate status passed.");
+        return;
+      }
+
+      workflowStep += 1;
+      renderWorkflow();
+      if (!isAuto) showToast("Workflow advanced to " + workflowSteps[workflowStep].title + ".");
+    }
+
+    function resetWorkflow(keepLog = false) {
+      workflowTimers.forEach((timer) => window.clearTimeout(timer));
+      workflowTimers = [];
+      workflowStep = 0;
+      workflowDone = false;
+      clearWorkflowErrors();
+      setHappyPathInputs();
+      if (!keepLog) {
+        workflowLog.innerHTML = `<div class="log-line"><time>ready</time><span>Demo initialized with valid release eval inputs.</span></div>`;
+      }
+      renderWorkflow();
+    }
+
+    function playWorkflow() {
+      resetWorkflow(false);
+      addWorkflowLog("Happy path playback started.", "demo");
+      workflowSteps.forEach((_, index) => {
+        const timer = window.setTimeout(() => advanceWorkflow(true), 760 * (index + 1));
+        workflowTimers.push(timer);
+      });
+    }
+
+    function triggerWorkflowError(type) {
+      resetWorkflow(true);
+      if (type === "missingDataset") {
+        document.getElementById("demoDataset").value = "";
+        workflowStep = 0;
+      }
+      if (type === "badCandidate") {
+        document.getElementById("demoCandidate").value = "latest";
+        workflowStep = 0;
+      }
+      if (type === "blankComment") {
+        document.getElementById("demoComment").value = "";
+        workflowStep = 4;
+      }
+      validateWorkflowStep();
+      showToast("异常输入已触发。");
     }
 
     function gateClass(gate) {
@@ -1545,9 +2074,27 @@
       showToast("Dataset Version draft frozen as Release Gate Dataset v4.");
     });
 
+    document.getElementById("playWorkflow").addEventListener("click", playWorkflow);
+    document.getElementById("advanceWorkflow").addEventListener("click", () => advanceWorkflow(false));
+    document.getElementById("resetWorkflow").addEventListener("click", () => {
+      resetWorkflow(false);
+      showToast("Workflow demo reset.");
+    });
+    document.getElementById("demoMissingDataset").addEventListener("click", () => triggerWorkflowError("missingDataset"));
+    document.getElementById("demoBadCandidate").addEventListener("click", () => triggerWorkflowError("badCandidate"));
+    document.getElementById("demoBlankComment").addEventListener("click", () => triggerWorkflowError("blankComment"));
+
+    Object.values(workflowInputIds).forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => {
+        clearWorkflowErrors();
+        renderWorkflow();
+      });
+    });
+
     renderExperiments();
     renderCases();
     loadCase(0);
+    renderWorkflow();
   </script>
 </body>
 </html>
