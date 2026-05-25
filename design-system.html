@@ -4,6 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Evalove UI Design System 1.0</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --paper: #ffffff;
@@ -27,9 +30,7 @@
       --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
       --shadow-hard: 0 2px 8px rgba(23, 32, 51, 0.08);
       --radius: 8px;
-      --mono: "SFMono-Regular", "Cascadia Code", "Liberation Mono", "Menlo", monospace;
-      --serif: "Aptos Display", "Source Han Serif SC", "STSong", serif;
-      --sans: "Aptos", "Source Han Sans SC", "Noto Sans SC", "PingFang SC", sans-serif;
+      --font: "Roboto", "Noto Sans SC", "PingFang SC", sans-serif;
     }
 
     * {
@@ -43,7 +44,7 @@
     body {
       margin: 0;
       color: var(--ink);
-      font-family: var(--sans);
+      font-family: var(--font);
       background:
         linear-gradient(90deg, rgba(38, 115, 221, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
         linear-gradient(0deg, rgba(38, 115, 221, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
@@ -61,7 +62,7 @@
 
     code,
     pre {
-      font-family: var(--mono);
+      font-family: var(--font);
     }
 
     .shell {
@@ -94,7 +95,7 @@
 
     .brand h1 {
       margin: 0;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 34px;
       line-height: 0.95;
     }
@@ -106,7 +107,7 @@
       border-radius: var(--radius);
       color: var(--acid);
       background: #f0f7ff;
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 12px;
       text-align: center;
     }
@@ -146,7 +147,7 @@
     }
 
     .toc span {
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 12px;
     }
 
@@ -183,14 +184,14 @@
       border-radius: var(--radius);
       background: #edf5ff;
       color: var(--acid);
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 12px;
     }
 
     .intro h2 {
       max-width: 900px;
       margin: 28px 0 18px;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: clamp(42px, 5vw, 72px);
       line-height: 0.98;
       letter-spacing: 0;
@@ -217,7 +218,7 @@
 
     .principles h3 {
       margin: 0 0 8px;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 32px;
       line-height: 1;
     }
@@ -237,7 +238,7 @@
 
     .principle b {
       color: var(--acid);
-      font-family: var(--mono);
+      font-family: var(--font);
     }
 
     section {
@@ -262,7 +263,7 @@
 
     .section-head h2 {
       margin: 0;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 34px;
       line-height: 1;
     }
@@ -308,7 +309,7 @@
     .swatch b {
       display: block;
       margin-top: 8px;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 24px;
       line-height: 1;
     }
@@ -358,14 +359,14 @@
 
     .spec .label {
       color: var(--muted);
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 11px;
       text-transform: uppercase;
     }
 
     .type-display {
       margin: 12px 0 0;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: clamp(44px, 7vw, 88px);
       line-height: 0.9;
     }
@@ -379,7 +380,7 @@
 
     .type-mono {
       margin: 14px 0 0;
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 13px;
       color: var(--muted);
     }
@@ -401,7 +402,7 @@
 
     .component h3 {
       margin: 0 0 14px;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 26px;
       line-height: 1;
     }
@@ -485,7 +486,7 @@
       padding: 4px 8px;
       border: 1px solid var(--line-dark);
       border-radius: var(--radius);
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 11px;
       white-space: nowrap;
     }
@@ -525,7 +526,7 @@
 
     .metric .label {
       color: var(--muted);
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 11px;
       text-transform: uppercase;
     }
@@ -533,7 +534,7 @@
     .metric strong {
       display: block;
       margin-top: 18px;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 40px;
       line-height: 0.95;
     }
@@ -568,12 +569,12 @@
       color: var(--muted);
       font-size: 11px;
       text-transform: uppercase;
-      font-family: var(--mono);
+      font-family: var(--font);
     }
 
     .score {
       margin: 28px 0 8px;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 88px;
       line-height: 0.9;
     }
@@ -583,7 +584,7 @@
       border-radius: var(--radius);
       background: var(--acid);
       color: #ffffff;
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 12px;
       font-weight: 700;
     }
@@ -644,7 +645,7 @@
 
     th {
       color: var(--muted);
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 11px;
       text-transform: uppercase;
       background: #f5f7fb;
@@ -697,7 +698,7 @@
 
     .output h4 {
       margin: 0 0 10px;
-      font-family: var(--mono);
+      font-family: var(--font);
       font-size: 12px;
       color: var(--muted);
       text-transform: uppercase;
@@ -742,7 +743,7 @@
 
     .ad-copy b {
       display: block;
-      font-family: var(--serif);
+      font-family: var(--font);
       font-size: 30px;
       line-height: 0.95;
     }
@@ -878,7 +879,7 @@
           <div class="principle"><b>01</b><span>证据优先：状态、输出、review、attempt 都要能追溯。</span></div>
           <div class="principle"><b>02</b><span>克制高亮：#2673DD 只用于主按钮、当前导航和可点击入口；状态不要混用主题色。</span></div>
           <div class="principle"><b>03</b><span>轻量容器：8px radius、浅灰边框、柔和阴影，形成干净后台感。</span></div>
-          <div class="principle"><b>04</b><span>可扫读密度：数字用 serif 放大，标签用 mono 收敛，表格保持紧凑。</span></div>
+          <div class="principle"><b>04</b><span>可扫读密度：统一 Roboto，通过字号、字重和间距区分数字、标签与正文。</span></div>
         </div>
       </div>
 
@@ -917,22 +918,22 @@
         <div class="section-head">
           <div>
             <h2>字体与排版</h2>
-            <p>Display 使用系统可用 serif，制造“质检报告”质感；正文使用干净 sans；标签、编号和 token 使用 mono。</p>
+            <p>全站统一使用 Roboto。标题、正文、数字、标签和 token 不再区分字体家族，保持后台产品的一致阅读节奏。</p>
           </div>
         </div>
         <div class="body">
           <div class="spec-grid">
             <div class="spec">
-              <div class="label">Display / Serif</div>
+              <div class="label">Display / Roboto</div>
               <div class="type-display">92%</div>
               <p class="type-body">用于 gate score、hero 标题、metric 数字。字号大、行高紧，承载页面记忆点。</p>
             </div>
             <div class="spec">
-              <div class="label">Body / Sans</div>
+              <div class="label">Body / Roboto</div>
               <p class="type-body">Skill Owner 创建 release eval，Reviewer 在队列中集中处理 comparison。正文保持清晰，避免装饰化。</p>
             </div>
             <div class="spec">
-              <div class="label">Metadata / Mono</div>
+              <div class="label">Metadata / Roboto</div>
               <p class="type-mono">Dataset Version / Experiment / Variant Run / Review Queue</p>
               <p class="type-body">用于编号、状态、路径、token、CSV、version record。</p>
             </div>
@@ -1123,9 +1124,7 @@
   --panel: #ffffff;
   --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
   --radius: 8px;
-  --mono: "SFMono-Regular", "Cascadia Code", "Liberation Mono", "Menlo", monospace;
-  --serif: "Aptos Display", "Source Han Serif SC", "STSong", serif;
-  --sans: "Aptos", "Source Han Sans SC", "Noto Sans SC", "PingFang SC", sans-serif;
+  --font: "Roboto", "Noto Sans SC", "PingFang SC", sans-serif;
 }</pre>
         </div>
       </section>

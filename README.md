@@ -27,6 +27,8 @@ Theme: white Ant Design-inspired enterprise workbench.
 
 Primary color: `#2673DD`
 
+Typography: `Roboto` via the shared `--font` token.
+
 Status colors:
 
 - Success: `#52C41A`
