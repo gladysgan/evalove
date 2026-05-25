@@ -1,0 +1,1427 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evalove 1.0 - Skill Evaluation Workbench</title>
+  <style>
+    :root {
+      --paper: #f3efe6;
+      --paper-2: #e7dfcf;
+      --ink: #171713;
+      --muted: #6f6a5e;
+      --line: #c9bfae;
+      --line-dark: #2d2a24;
+      --steel: #56616b;
+      --moss: #2f6f5e;
+      --acid: #d7ff58;
+      --amber: #d9892f;
+      --brick: #9a3326;
+      --blueprint: #203a43;
+      --panel: rgba(255, 252, 245, 0.78);
+      --shadow: 0 24px 70px rgba(42, 37, 28, 0.16);
+      --mono: "SFMono-Regular", "Cascadia Code", "Liberation Mono", "Menlo", monospace;
+      --serif: "Iowan Old Style", "Palatino", "STSong", serif;
+      --sans: "Aptos", "IBM Plex Sans", "Source Han Sans SC", "Noto Sans SC", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        linear-gradient(90deg, rgba(32, 58, 67, 0.07) 1px, transparent 1px) 0 0 / 44px 44px,
+        linear-gradient(0deg, rgba(32, 58, 67, 0.05) 1px, transparent 1px) 0 0 / 44px 44px,
+        radial-gradient(circle at 12% 4%, rgba(215, 255, 88, 0.24), transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(217, 137, 47, 0.18), transparent 30%),
+        var(--paper);
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px;
+      border-right: 1px solid var(--line-dark);
+      background: #171713;
+      color: var(--paper);
+      overflow: auto;
+    }
+
+    .mark {
+      display: grid;
+      gap: 10px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid rgba(243, 239, 230, 0.18);
+    }
+
+    .mark-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .version {
+      min-width: 58px;
+      padding: 5px 8px;
+      border: 1px solid var(--acid);
+      border-radius: 8px;
+      color: var(--acid);
+      font-family: var(--mono);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .subtitle {
+      max-width: 210px;
+      color: rgba(243, 239, 230, 0.72);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+      margin: 22px 0;
+    }
+
+    .nav button {
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 10px;
+      border: 1px solid rgba(243, 239, 230, 0.16);
+      border-radius: 8px;
+      background: rgba(243, 239, 230, 0.04);
+      color: rgba(243, 239, 230, 0.8);
+      text-align: left;
+      transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: var(--acid);
+      color: var(--ink);
+      transform: translateX(3px);
+    }
+
+    .nav .symbol {
+      font-family: var(--mono);
+      font-size: 13px;
+    }
+
+    .nav .count {
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .rail-card {
+      margin-top: 20px;
+      padding: 14px;
+      border: 1px solid rgba(243, 239, 230, 0.2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .rail-label {
+      color: rgba(243, 239, 230, 0.54);
+      font-size: 11px;
+      text-transform: uppercase;
+      font-family: var(--mono);
+    }
+
+    .rail-card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .rail-card p {
+      margin: 8px 0 0;
+      color: rgba(243, 239, 230, 0.7);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    main {
+      min-width: 0;
+      padding: 20px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: -20px -20px 20px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(243, 239, 230, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .crumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      min-height: 38px;
+      padding: 9px 12px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 13px;
+      box-shadow: 4px 4px 0 rgba(23, 23, 19, 0.12);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 7px 7px 0 rgba(23, 23, 19, 0.14);
+    }
+
+    .btn.secondary {
+      background: var(--panel);
+      color: var(--ink);
+    }
+
+    .btn.signal {
+      background: var(--acid);
+      color: var(--ink);
+    }
+
+    .workspace {
+      display: grid;
+      gap: 20px;
+    }
+
+    .section {
+      display: none;
+      animation: lift 360ms ease both;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes lift {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .headline {
+      min-height: 360px;
+      padding: clamp(24px, 4vw, 46px);
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 252, 245, 0.88), rgba(231, 223, 207, 0.78)),
+        repeating-linear-gradient(110deg, transparent 0 16px, rgba(47, 111, 94, 0.08) 16px 17px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 9px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--acid);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 28px 0 18px;
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 104px);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: #403c33;
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.55;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(84px, 1fr));
+      gap: 8px;
+      margin-top: 30px;
+    }
+
+    .pipe-step {
+      min-height: 102px;
+      padding: 10px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: rgba(255, 252, 245, 0.72);
+    }
+
+    .pipe-step b {
+      display: block;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--moss);
+    }
+
+    .pipe-step span {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .status-plate {
+      display: grid;
+      align-content: space-between;
+      min-height: 360px;
+      padding: 22px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #203a43;
+      color: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .status-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .gate {
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--acid);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .score {
+      margin: 28px 0 8px;
+      font-family: var(--serif);
+      font-size: 88px;
+      line-height: 0.9;
+    }
+
+    .status-plate p {
+      color: rgba(243, 239, 230, 0.78);
+      line-height: 1.55;
+    }
+
+    .risk-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .risk {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 9px;
+      border: 1px solid rgba(243, 239, 230, 0.18);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+    }
+
+    .risk i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--acid);
+    }
+
+    .risk.warn i {
+      background: var(--amber);
+    }
+
+    .risk.stop i {
+      background: #ff644e;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .metric {
+      min-height: 136px;
+      padding: 16px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 8px 8px 0 rgba(23, 23, 19, 0.07);
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 18px;
+      font-family: var(--serif);
+      font-size: 40px;
+      line-height: 0.95;
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .panel {
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 252, 245, 0.7);
+    }
+
+    .panel-title {
+      display: grid;
+      gap: 4px;
+    }
+
+    .panel-title h2,
+    .panel-title h3 {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .panel-title p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .chip,
+    .seg button {
+      min-height: 34px;
+      padding: 8px 10px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: rgba(255, 252, 245, 0.78);
+      color: var(--ink);
+      font-size: 12px;
+    }
+
+    .chip.active,
+    .seg button.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .seg {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--paper-2);
+    }
+
+    .seg button {
+      border-color: transparent;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      background: rgba(231, 223, 207, 0.56);
+    }
+
+    tr {
+      transition: background 160ms ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(215, 255, 88, 0.13);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      padding: 4px 8px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .pill.pass {
+      background: rgba(47, 111, 94, 0.15);
+      color: var(--moss);
+    }
+
+    .pill.block {
+      background: rgba(154, 51, 38, 0.13);
+      color: var(--brick);
+    }
+
+    .pill.warn {
+      background: rgba(217, 137, 47, 0.16);
+      color: #7b4b12;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .queue-list {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      max-height: 740px;
+      overflow: auto;
+    }
+
+    .case-item {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 252, 245, 0.66);
+      text-align: left;
+    }
+
+    .case-item.active,
+    .case-item:hover {
+      border-color: var(--ink);
+      background: rgba(215, 255, 88, 0.18);
+    }
+
+    .case-item strong {
+      font-size: 14px;
+    }
+
+    .case-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .review-surface {
+      padding: 16px;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .output {
+      min-height: 280px;
+      padding: 14px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #fffaf0;
+      overflow: hidden;
+    }
+
+    .output h4 {
+      margin: 0 0 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .ad-canvas {
+      position: relative;
+      min-height: 210px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(47, 111, 94, 0.92), rgba(32, 58, 67, 0.94)),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px) 0 0 / 20px 20px;
+      color: white;
+    }
+
+    .ad-canvas.alt {
+      background:
+        linear-gradient(135deg, rgba(154, 51, 38, 0.9), rgba(217, 137, 47, 0.86)),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 20px 20px;
+    }
+
+    .product {
+      position: absolute;
+      right: 28px;
+      bottom: 24px;
+      width: 86px;
+      height: 116px;
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .ad-copy {
+      position: absolute;
+      left: 22px;
+      top: 22px;
+      width: 54%;
+    }
+
+    .ad-copy b {
+      display: block;
+      font-family: var(--serif);
+      font-size: 32px;
+      line-height: 0.95;
+    }
+
+    .ad-copy span {
+      display: block;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.35;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .rubric {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .rubric button {
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: rgba(255, 252, 245, 0.82);
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .rubric button.active {
+      background: var(--acid);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: rgba(255, 252, 245, 0.85);
+      resize: vertical;
+    }
+
+    .decision-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .decision-bar button {
+      min-width: 96px;
+    }
+
+    .dataset-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .suite-map {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .suite-row {
+      display: grid;
+      grid-template-columns: 132px 1fr 70px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 14px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255, 252, 245, 0.9);
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--moss);
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.42fr);
+      gap: 18px;
+    }
+
+    .audit-log {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .log-line {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .log-line time {
+      font-family: var(--mono);
+      color: var(--muted);
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 20;
+      max-width: 360px;
+      padding: 14px 16px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--ink);
+      color: var(--paper);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1160px) {
+      .hero-grid,
+      .two-col,
+      .dataset-grid,
+      .report-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline,
+      .grid-4,
+      .rubric {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 820px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: static;
+        height: auto;
+      }
+
+      .nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .topbar {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .grid-4,
+      .pipeline,
+      .comparison,
+      .rubric {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 52px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="Evalove navigation">
+      <div class="mark">
+        <div class="mark-row">
+          <div class="brand">Evalove</div>
+          <div class="version">1.0</div>
+        </div>
+        <div class="subtitle">Skill Evaluation workbench for release gate, review queue, and run evidence.</div>
+      </div>
+
+      <nav class="nav" aria-label="Sections">
+        <button class="active" data-section="overview"><span class="symbol">01</span><span>总览</span><span class="count">Gate</span></button>
+        <button data-section="experiments"><span class="symbol">02</span><span>实验</span><span class="count">4</span></button>
+        <button data-section="review"><span class="symbol">03</span><span>评审队列</span><span class="count" id="queueCount">6</span></button>
+        <button data-section="datasets"><span class="symbol">04</span><span>数据集</span><span class="count">v3</span></button>
+        <button data-section="report"><span class="symbol">05</span><span>报告</span><span class="count">CSV</span></button>
+      </nav>
+
+      <div class="rail-card">
+        <div class="rail-label">Active flow</div>
+        <strong>Dataset Version -> Experiment -> Run -> Review -> Gate</strong>
+        <p>固定数据集版本，baseline / candidate 独立运行，comparison 承载人工评审。</p>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="crumb">Skill Evaluation MVP / Release Gate Dataset v3 / Candidate 2026.05.25-r7</div>
+        <div class="top-actions">
+          <button class="btn secondary" id="simulateRun">运行 latest runs</button>
+          <button class="btn secondary" id="exportCsv">导出 CSV</button>
+          <button class="btn signal" id="notifyBtn">发送 Seatalk 预览</button>
+        </div>
+      </header>
+
+      <div class="workspace">
+        <section class="section active" id="overview">
+          <div class="hero-grid">
+            <div class="headline">
+              <div class="kicker">RELEASE EVAL / RECORD 1.0</div>
+              <h1>上线前评测，不靠感觉放行。</h1>
+              <p class="lead">Evalove 把 PRD 中的 Skill Evaluation MVP 转成可操作工作台：固定 Dataset Version，运行 baseline 与 candidate，进入 Review Queue，再用 Gate Status 输出发布判断。</p>
+              <div class="pipeline" aria-label="Evaluation pipeline">
+                <div class="pipe-step"><b>01</b><span>Dataset Version</span></div>
+                <div class="pipe-step"><b>02</b><span>Experiment</span></div>
+                <div class="pipe-step"><b>03</b><span>Variant Run</span></div>
+                <div class="pipe-step"><b>04</b><span>Comparison</span></div>
+                <div class="pipe-step"><b>05</b><span>Review Queue</span></div>
+                <div class="pipe-step"><b>06</b><span>Report / Gate</span></div>
+              </div>
+            </div>
+
+            <div class="status-plate">
+              <div>
+                <div class="status-head">
+                  <div>
+                    <div class="rail-label">Current gate</div>
+                    <div class="score" id="gateScore">92%</div>
+                  </div>
+                  <div class="gate" id="gateBadge">BLOCKED</div>
+                </div>
+                <p id="gateNarrative">总体通过率达标，但仍有 1 个 P0 failed 和 2 个 not sure。Gate 不能放行。</p>
+              </div>
+              <div class="risk-stack">
+                <div class="risk stop"><i></i><span>P0 failed</span><b id="p0Risk">1</b></div>
+                <div class="risk warn"><i></i><span>Not Sure</span><b id="nsRisk">2</b></div>
+                <div class="risk"><i></i><span>Skip Rate</span><b>3%</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-4">
+            <div class="metric"><div class="label">Dataset Version</div><strong>RG-v3</strong><small>42 cases / 7 suites / frozen snapshot</small></div>
+            <div class="metric"><div class="label">Variant Runs</div><strong id="runMetric">84</strong><small>baseline + candidate, latest attempt tracked</small></div>
+            <div class="metric"><div class="label">Review Queue</div><strong id="reviewMetric">36/42</strong><small>6 comparisons still need attention</small></div>
+            <div class="metric"><div class="label">Gate Rules</div><strong>6</strong><small>P0, regression, skip, not sure, runner, general</small></div>
+          </div>
+        </section>
+
+        <section class="section" id="experiments">
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <h2>Experiment Management</h2>
+                <p>按 PRD 的 gate_status、dataset_version、suite result 组织实验列表。</p>
+              </div>
+              <div class="filters" aria-label="Experiment filters">
+                <button class="chip active" data-filter="all">全部</button>
+                <button class="chip" data-filter="blocked">Blocked</button>
+                <button class="chip" data-filter="passed">Passed</button>
+                <button class="chip" data-filter="running">Running</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Experiment</th>
+                    <th>Skill</th>
+                    <th>Candidate / Baseline</th>
+                    <th>Dataset</th>
+                    <th>Status</th>
+                    <th>Gate</th>
+                    <th>Suite Signal</th>
+                    <th>Owner</th>
+                  </tr>
+                </thead>
+                <tbody id="experimentRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="review">
+          <div class="two-col">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h3>Review Queue</h3>
+                  <p>同一 comparison 同一时间只允许一个 active reviewer。</p>
+                </div>
+              </div>
+              <div class="queue-list" id="caseList"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h2 id="caseTitle">MY banner - subject retained</h2>
+                  <p id="caseCriteria">Acceptance: 主体完整，尺寸 1200x360，MY 文案不截断。</p>
+                </div>
+                <span class="pill warn" id="caseState">needs review</span>
+              </div>
+              <div class="review-surface">
+                <div class="comparison">
+                  <div class="output">
+                    <h4>Baseline output</h4>
+                    <div class="ad-canvas">
+                      <div class="ad-copy"><b>MY Payday Deal</b><span>Baseline keeps product visible but loses brand badge spacing.</span></div>
+                      <div class="product"></div>
+                    </div>
+                  </div>
+                  <div class="output">
+                    <h4>Candidate output</h4>
+                    <div class="ad-canvas alt">
+                      <div class="ad-copy"><b id="candidateHeadline">Payday Deal</b><span id="candidateNote">Candidate improves contrast; reviewer must confirm no text cutoff.</span></div>
+                      <div class="product"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="seg" role="tablist" aria-label="Decision">
+                  <button class="active" data-decision="passed">Pass</button>
+                  <button data-decision="failed">Fail</button>
+                  <button data-decision="not_sure">Not Sure</button>
+                  <button data-decision="skipped">Skip</button>
+                </div>
+
+                <div class="rubric" aria-label="Rubric scores">
+                  <button class="active">output_validity<br><b>OK</b></button>
+                  <button class="active">requirement_following<br><b>OK</b></button>
+                  <button>visual_quality<br><b>Check</b></button>
+                  <button>content_accuracy<br><b>Check</b></button>
+                  <button>baseline_comparison<br><b>same</b></button>
+                </div>
+
+                <label class="sr-only" for="reviewComment">Review comment</label>
+                <textarea id="reviewComment">Candidate keeps the product visible. Need one more pass for MY localized copy length.</textarea>
+                <div class="decision-bar">
+                  <button class="btn signal" id="submitReview">提交 Review</button>
+                  <button class="btn secondary" id="nextCase">下一条</button>
+                  <button class="btn secondary" id="rerunCase">重跑 candidate</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="datasets">
+          <div class="dataset-grid">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h2>Dataset Library</h2>
+                  <p>Experiment 必须绑定 Dataset Version；tag 只负责检索和组装。</p>
+                </div>
+                <button class="btn secondary" id="freezeDataset">冻结新版本</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Dataset</th><th>Version</th><th>Cases</th><th>Snapshot</th><th>Owner</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Release Gate Dataset</td><td>v3</td><td>42</td><td><span class="pill pass">frozen</span></td><td>Platform Admin</td></tr>
+                    <tr><td>Regression Dataset</td><td>v8</td><td>128</td><td><span class="pill pass">frozen</span></td><td>Skill QA</td></tr>
+                    <tr><td>Bad Case Dataset</td><td>v2</td><td>31</td><td><span class="pill warn">draft</span></td><td>Design Ops</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h3>Suite 分布</h3>
+                  <p>用于 gate rules 和报告拆解。</p>
+                </div>
+              </div>
+              <div class="suite-map">
+                <div class="suite-row"><b>general</b><div class="bar"><span style="width: 80%"></span></div><span>20</span></div>
+                <div class="suite-row"><b>p0_required</b><div class="bar"><span style="width: 28%; background: var(--brick)"></span></div><span>7</span></div>
+                <div class="suite-row"><b>regression</b><div class="bar"><span style="width: 44%; background: var(--amber)"></span></div><span>11</span></div>
+                <div class="suite-row"><b>market_my</b><div class="bar"><span style="width: 36%"></span></div><span>9</span></div>
+                <div class="suite-row"><b>bad_case</b><div class="bar"><span style="width: 20%; background: var(--blueprint)"></span></div><span>5</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="report">
+          <div class="report-grid">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h2>Experiment Report</h2>
+                  <p>给 Skill Owner 和 Approver 的发布判断证据。</p>
+                </div>
+                <span class="pill block">gate_status: blocked</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Risk</th><th>Count</th><th>Evidence</th><th>Action</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>P0 failed</td><td>1</td><td>MY banner - subject retained</td><td>Fix candidate or mark exception</td></tr>
+                    <tr><td>Not Sure</td><td>2</td><td>ID locale copy length, mixed asset crop</td><td>Owner adjudication</td></tr>
+                    <tr><td>Runner failed</td><td>0</td><td>No active failure</td><td>None</td></tr>
+                    <tr><td>Skip rate</td><td>3%</td><td>Below 5% threshold</td><td>Allowed</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h3>Audit trail</h3>
+                  <p>重跑和评审都保留记录。</p>
+                </div>
+              </div>
+              <div class="audit-log" id="auditLog">
+                <div class="log-line"><time>09:12</time><span>Dataset Version RG-v3 bound to experiment.</span></div>
+                <div class="log-line"><time>09:19</time><span>84 latest runs completed. Status moved to reviewing.</span></div>
+                <div class="log-line"><time>09:35</time><span>Reviewer submitted 36 structured reviews.</span></div>
+                <div class="log-line"><time>09:41</time><span>Gate blocked by P0 failed and not_sure.</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const experiments = [
+      {
+        name: "Release Eval / MY image relayout",
+        skill: "image_relayout",
+        versions: "candidate r7 / baseline live",
+        dataset: "Release Gate v3",
+        status: "reviewing",
+        gate: "blocked",
+        suite: "P0 failed 1 / not sure 2",
+        owner: "Xinyi"
+      },
+      {
+        name: "Regression Eval / copy safety",
+        skill: "copy_guard",
+        versions: "candidate r3 / baseline live",
+        dataset: "Regression v8",
+        status: "completed",
+        gate: "passed",
+        suite: "128/128 counted",
+        owner: "Design QA"
+      },
+      {
+        name: "Golden Eval / prompt rewrite",
+        skill: "brief_refiner",
+        versions: "candidate r2 / baseline live",
+        dataset: "Golden v5",
+        status: "running",
+        gate: "not_evaluated",
+        suite: "runs 48%",
+        owner: "Platform"
+      },
+      {
+        name: "Bad Case Eval / mixed asset",
+        skill: "asset_composer",
+        versions: "candidate r4 / no baseline",
+        dataset: "Bad Case v2",
+        status: "reviewing",
+        gate: "failed",
+        suite: "general 82%",
+        owner: "Skill Ops"
+      }
+    ];
+
+    const queueCases = [
+      {
+        title: "MY banner - subject retained",
+        criteria: "Acceptance: 主体完整，尺寸 1200x360，MY 文案不截断。",
+        state: "P0 / not_sure",
+        headline: "Payday Deal",
+        note: "Candidate improves contrast; reviewer must confirm no text cutoff."
+      },
+      {
+        title: "ID campaign - long copy",
+        criteria: "Acceptance: 印尼语长文案完整展示，CTA 不遮挡商品。",
+        state: "regression",
+        headline: "Promo Akhir Bulan",
+        note: "Candidate keeps layout stable but CTA is close to safe margin."
+      },
+      {
+        title: "Mixed asset - packshot crop",
+        criteria: "Acceptance: packshot 不被裁切，背景符合 campaign brief。",
+        state: "bad_case",
+        headline: "Fresh Bundle",
+        note: "Candidate crop improved; packshot shadow may be too heavy."
+      },
+      {
+        title: "Golden case - brand color",
+        criteria: "Acceptance: 保留品牌主色，输出格式为 image_url。",
+        state: "golden",
+        headline: "Brand Week",
+        note: "Candidate matches brand palette and output type."
+      },
+      {
+        title: "P0 - wrong size guard",
+        criteria: "Acceptance: 输出必须为 1200x360，不能出现 1px 尺寸偏差。",
+        state: "P0 / failed",
+        headline: "Mega Day",
+        note: "Candidate output is 1198x360; mark failed unless rerun fixes it."
+      },
+      {
+        title: "Regression - subject lost",
+        criteria: "Acceptance: 商品主体和价格利益点都必须可见。",
+        state: "regression",
+        headline: "Flash Picks",
+        note: "Candidate preserves price but subject is visually weaker."
+      }
+    ];
+
+    let activeCase = 0;
+    let queueRemaining = queueCases.length;
+
+    const toast = document.getElementById("toast");
+    const experimentRows = document.getElementById("experimentRows");
+    const caseList = document.getElementById("caseList");
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    function gateClass(gate) {
+      if (gate === "passed") return "pass";
+      if (gate === "blocked" || gate === "failed") return "block";
+      return "warn";
+    }
+
+    function renderExperiments(filter = "all") {
+      const visible = experiments.filter((item) => filter === "all" || item.gate === filter || item.status === filter);
+      experimentRows.innerHTML = visible.map((item) => `
+        <tr>
+          <td><b>${item.name}</b></td>
+          <td>${item.skill}</td>
+          <td>${item.versions}</td>
+          <td>${item.dataset}</td>
+          <td><span class="pill warn">${item.status}</span></td>
+          <td><span class="pill ${gateClass(item.gate)}">${item.gate}</span></td>
+          <td>${item.suite}</td>
+          <td>${item.owner}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderCases() {
+      caseList.innerHTML = queueCases.map((item, index) => `
+        <button class="case-item ${index === activeCase ? "active" : ""}" data-case="${index}">
+          <strong>${item.title}</strong>
+          <span>${item.criteria}</span>
+          <span class="case-meta">
+            <span class="pill ${item.state.includes("failed") ? "block" : "warn"}">${item.state}</span>
+            <span class="pill">assigned</span>
+          </span>
+        </button>
+      `).join("");
+      document.getElementById("queueCount").textContent = String(queueRemaining);
+    }
+
+    function loadCase(index) {
+      activeCase = index;
+      const item = queueCases[index];
+      document.getElementById("caseTitle").textContent = item.title;
+      document.getElementById("caseCriteria").textContent = item.criteria;
+      document.getElementById("caseState").textContent = item.state;
+      document.getElementById("candidateHeadline").textContent = item.headline;
+      document.getElementById("candidateNote").textContent = item.note;
+      document.getElementById("reviewComment").value = item.note;
+      renderCases();
+    }
+
+    document.querySelectorAll(".nav button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".nav button").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll(".section").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.section).classList.add("active");
+      });
+    });
+
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach((item) => item.classList.remove("active"));
+        chip.classList.add("active");
+        renderExperiments(chip.dataset.filter);
+      });
+    });
+
+    document.querySelectorAll(".seg button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".seg button").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        const decision = button.dataset.decision;
+        const comment = document.getElementById("reviewComment");
+        if (decision === "failed") comment.value = "Fail: issue_type and severity are required before submit.";
+        if (decision === "skipped") comment.value = "Skip reason required: case input unavailable for this release.";
+        if (decision === "not_sure") comment.value = "Not Sure: needs Owner adjudication before gate calculation.";
+        if (decision === "passed") comment.value = "Candidate satisfies acceptance criteria and does not regress from baseline.";
+      });
+    });
+
+    caseList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-case]");
+      if (!button) return;
+      loadCase(Number(button.dataset.case));
+    });
+
+    document.getElementById("submitReview").addEventListener("click", () => {
+      queueRemaining = Math.max(0, queueRemaining - 1);
+      document.getElementById("queueCount").textContent = String(queueRemaining);
+      document.getElementById("reviewMetric").textContent = `${42 - queueRemaining}/42`;
+      showToast("Structured review saved. Comparison latest_review_id updated.");
+    });
+
+    document.getElementById("nextCase").addEventListener("click", () => {
+      loadCase((activeCase + 1) % queueCases.length);
+    });
+
+    document.getElementById("rerunCase").addEventListener("click", () => {
+      const log = document.getElementById("auditLog");
+      const line = document.createElement("div");
+      line.className = "log-line";
+      line.innerHTML = `<time>now</time><span>Candidate run rerun requested. New attempt_no will be created.</span>`;
+      log.prepend(line);
+      showToast("Rerun queued. Old attempt remains available for audit.");
+    });
+
+    document.getElementById("simulateRun").addEventListener("click", () => {
+      document.getElementById("runMetric").textContent = "84";
+      showToast("Latest runs completed. Experiment status moved to reviewing.");
+    });
+
+    document.getElementById("notifyBtn").addEventListener("click", () => {
+      showToast("Seatalk preview: gate_status blocked, report link attached.");
+    });
+
+    document.getElementById("exportCsv").addEventListener("click", () => {
+      const csv = "experiment,gate_status,overall_pass_rate,p0_failed,not_sure\\nRelease Eval / MY image relayout,blocked,92%,1,2\\n";
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "evalove-report-1.0.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("CSV exported from Experiment Report.");
+    });
+
+    document.getElementById("freezeDataset").addEventListener("click", () => {
+      showToast("Dataset Version draft frozen as Release Gate Dataset v4.");
+    });
+
+    renderExperiments();
+    renderCases();
+    loadCase(0);
+  </script>
+</body>
+</html>
