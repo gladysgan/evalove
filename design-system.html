@@ -13,10 +13,15 @@
       --line: #e6eaf0;
       --line-dark: #d7dde7;
       --steel: #516173;
-      --moss: #16a163;
       --acid: #2673DD;
-      --amber: #d48806;
-      --brick: #cf1322;
+      --status-success: #52C41A;
+      --status-error: #FF4D4F;
+      --status-default: #D9D9D9;
+      --status-processing: #1890FF;
+      --status-warning: #FA8C16;
+      --moss: var(--status-success);
+      --amber: var(--status-warning);
+      --brick: var(--status-error);
       --blueprint: #edf5ff;
       --panel: #ffffff;
       --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
@@ -43,7 +48,7 @@
         linear-gradient(90deg, rgba(38, 115, 221, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
         linear-gradient(0deg, rgba(38, 115, 221, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
         radial-gradient(circle at 14% 4%, rgba(38, 115, 221, 0.12), transparent 30%),
-        radial-gradient(circle at 86% 8%, rgba(22, 161, 99, 0.08), transparent 28%),
+        radial-gradient(circle at 86% 8%, rgba(82, 196, 26, 0.08), transparent 28%),
         var(--paper);
       letter-spacing: 0;
     }
@@ -186,8 +191,8 @@
       max-width: 900px;
       margin: 28px 0 18px;
       font-family: var(--serif);
-      font-size: clamp(48px, 7vw, 96px);
-      line-height: 0.9;
+      font-size: clamp(42px, 5vw, 72px);
+      line-height: 0.98;
       letter-spacing: 0;
     }
 
@@ -306,6 +311,35 @@
       font-family: var(--serif);
       font-size: 24px;
       line-height: 1;
+    }
+
+    .status-sample {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: #3f3f3f;
+      font-size: 15px;
+      box-shadow: var(--shadow-hard);
+    }
+
+    .status-dot {
+      width: 14px;
+      height: 14px;
+      flex: 0 0 14px;
+      border-radius: 50%;
+      background: var(--status-default);
     }
 
     .spec-grid {
@@ -457,7 +491,7 @@
     }
 
     .pill.pass {
-      border-color: #b7ebc6;
+      border-color: #b7eb8f;
       background: #f6ffed;
       color: var(--moss);
     }
@@ -471,7 +505,7 @@
     .pill.warn {
       border-color: #ffe7ba;
       background: #fff7e6;
-      color: #7b4b12;
+      color: var(--amber);
     }
 
     .metric-grid {
@@ -583,7 +617,7 @@
     }
 
     .risk.stop i {
-      background: #ff644e;
+      background: var(--brick);
     }
 
     .table-wrap {
@@ -683,7 +717,7 @@
 
     .ad-canvas.alt {
       background:
-        linear-gradient(135deg, rgba(38, 115, 221, 0.86), rgba(22, 161, 99, 0.82)),
+        linear-gradient(135deg, rgba(38, 115, 221, 0.86), rgba(82, 196, 26, 0.82)),
         linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) 0 0 / 20px 20px;
     }
 
@@ -769,6 +803,7 @@
       }
 
       .token-grid,
+      .status-sample,
       .metric-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
@@ -796,6 +831,7 @@
       .comparison,
       .rubric,
       .token-grid,
+      .status-sample,
       .metric-grid {
         grid-template-columns: 1fr;
       }
@@ -834,13 +870,13 @@
       <div class="hero" id="principles">
         <div class="intro">
           <div class="kicker">UI DESIGN SYSTEM / RECORD 1.0</div>
-          <h2>白底评测台，蓝色做决策锚点。</h2>
-          <p class="lead">Evalove 的视觉语言向 Ant Design 的企业后台靠拢：白底、轻边框、清晰层级和稳定状态色。主题蓝 #2673DD 用来承载主操作、当前项和关键判断。</p>
+          <h2>状态色规范</h2>
+          <p class="lead">Evalove 的视觉语言向 Ant Design 的企业后台靠拢：白底、轻边框、清晰层级和稳定状态色。主题蓝 #2673DD 用来承载主操作，状态色只用于成功、错误、默认、处理中和警告。</p>
         </div>
         <div class="principles">
           <h3>设计原则</h3>
           <div class="principle"><b>01</b><span>证据优先：状态、输出、review、attempt 都要能追溯。</span></div>
-          <div class="principle"><b>02</b><span>克制高亮：#2673DD 只用于主按钮、当前导航、关键状态和可点击入口。</span></div>
+          <div class="principle"><b>02</b><span>克制高亮：#2673DD 只用于主按钮、当前导航和可点击入口；状态不要混用主题色。</span></div>
           <div class="principle"><b>03</b><span>轻量容器：8px radius、浅灰边框、柔和阴影，形成干净后台感。</span></div>
           <div class="principle"><b>04</b><span>可扫读密度：数字用 serif 放大，标签用 mono 收敛，表格保持紧凑。</span></div>
         </div>
@@ -850,7 +886,7 @@
         <div class="section-head">
           <div>
             <h2>颜色 Token</h2>
-            <p>白色作为主背景，#2673DD 作为主题色。状态色参考企业后台常见语义：绿色成功、橙色待处理、红色阻断。</p>
+            <p>白色作为主背景，#2673DD 作为主题色。状态色参考 Ant Design 语义：绿色成功、红色错误、灰色默认、蓝色处理中、橙色警告。</p>
           </div>
           <span class="pill pass">contrast checked by usage</span>
         </div>
@@ -861,9 +897,18 @@
             <div class="swatch dark" style="background: var(--ink);"><code>--ink<br>#172033</code><b>Text Ink</b></div>
             <div class="swatch dark" style="background: var(--acid);"><code>--acid<br>#2673DD</code><b>Primary Blue</b></div>
             <div class="swatch" style="background: var(--blueprint);"><code>--blueprint<br>#edf5ff</code><b>Blue Tint</b></div>
-            <div class="swatch dark" style="background: var(--moss);"><code>--moss<br>#16a163</code><b>Success Green</b></div>
-            <div class="swatch" style="background: var(--amber);"><code>--amber<br>#d48806</code><b>Warning Orange</b></div>
-            <div class="swatch dark" style="background: var(--brick);"><code>--brick<br>#cf1322</code><b>Error Red</b></div>
+            <div class="swatch" style="background: var(--status-success);"><code>--status-success<br>#52C41A</code><b>Success</b></div>
+            <div class="swatch" style="background: var(--status-error);"><code>--status-error<br>#FF4D4F</code><b>Error</b></div>
+            <div class="swatch" style="background: var(--status-default);"><code>--status-default<br>#D9D9D9</code><b>Default</b></div>
+            <div class="swatch" style="background: var(--status-processing);"><code>--status-processing<br>#1890FF</code><b>Processing</b></div>
+            <div class="swatch" style="background: var(--status-warning);"><code>--status-warning<br>#FA8C16</code><b>Warning</b></div>
+          </div>
+          <div class="status-sample" aria-label="Status color examples">
+            <div class="status-item"><i class="status-dot" style="background: var(--status-success);"></i><span>Success</span></div>
+            <div class="status-item"><i class="status-dot" style="background: var(--status-error);"></i><span>Error</span></div>
+            <div class="status-item"><i class="status-dot" style="background: var(--status-default);"></i><span>Default</span></div>
+            <div class="status-item"><i class="status-dot" style="background: var(--status-processing);"></i><span>Processing</span></div>
+            <div class="status-item"><i class="status-dot" style="background: var(--status-warning);"></i><span>Warning</span></div>
           </div>
         </div>
       </section>
@@ -1065,10 +1110,15 @@
   --line: #e6eaf0;
   --line-dark: #d7dde7;
   --steel: #516173;
-  --moss: #16a163;
   --acid: #2673DD;
-  --amber: #d48806;
-  --brick: #cf1322;
+  --status-success: #52C41A;
+  --status-error: #FF4D4F;
+  --status-default: #D9D9D9;
+  --status-processing: #1890FF;
+  --status-warning: #FA8C16;
+  --moss: var(--status-success);
+  --amber: var(--status-warning);
+  --brick: var(--status-error);
   --blueprint: #edf5ff;
   --panel: #ffffff;
   --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);

@@ -26,3 +26,11 @@ The prototype maps the PRD flow into a static interactive workbench:
 Theme: white Ant Design-inspired enterprise workbench.
 
 Primary color: `#2673DD`
+
+Status colors:
+
+- Success: `#52C41A`
+- Error: `#FF4D4F`
+- Default: `#D9D9D9`
+- Processing: `#1890FF`
+- Warning: `#FA8C16`
