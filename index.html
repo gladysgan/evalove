@@ -22,6 +22,9 @@
       --status-default: #D9D9D9;
       --status-processing: #1890FF;
       --status-warning: #FA8C16;
+      --moss: var(--status-success);
+      --amber: var(--status-warning);
+      --brick: var(--status-error);
       --blueprint: #edf5ff;
       --panel: #ffffff;
       --shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
@@ -45,8 +48,8 @@
       background:
         linear-gradient(90deg, rgba(38, 115, 221, 0.045) 1px, transparent 1px) 0 0 / 48px 48px,
         linear-gradient(0deg, rgba(38, 115, 221, 0.035) 1px, transparent 1px) 0 0 / 48px 48px,
-        radial-gradient(circle at 12% 4%, rgba(38, 115, 221, 0.1), transparent 28%),
-        radial-gradient(circle at 88% 8%, rgba(82, 196, 26, 0.08), transparent 28%),
+        radial-gradient(circle at 14% 4%, rgba(38, 115, 221, 0.12), transparent 30%),
+        radial-gradient(circle at 86% 8%, rgba(82, 196, 26, 0.08), transparent 28%),
         var(--paper);
       letter-spacing: 0;
     }
@@ -63,11 +66,6 @@
       cursor: pointer;
     }
 
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.55;
-    }
-
     .shell {
       display: grid;
       grid-template-columns: 280px minmax(0, 1fr);
@@ -80,7 +78,8 @@
       height: 100vh;
       padding: 22px;
       border-right: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
       box-shadow: 4px 0 24px rgba(23, 32, 51, 0.04);
       backdrop-filter: blur(18px);
       overflow: auto;
@@ -101,9 +100,10 @@
     }
 
     .brand {
+      font-family: var(--font);
       font-size: 34px;
       line-height: 0.95;
-      font-weight: 700;
+      letter-spacing: 0;
     }
 
     .version {
@@ -113,6 +113,7 @@
       border-radius: 8px;
       color: var(--acid);
       background: #f0f7ff;
+      font-family: var(--font);
       font-size: 12px;
       text-align: center;
     }
@@ -136,7 +137,6 @@
       align-items: center;
       gap: 8px;
       width: 100%;
-      min-height: 46px;
       padding: 11px 10px;
       border: 1px solid transparent;
       border-radius: 8px;
@@ -153,35 +153,40 @@
       transform: translateX(3px);
     }
 
-    .symbol,
-    .count,
-    .rail-label,
-    .label {
-      font-size: 11px;
-      text-transform: uppercase;
+    .nav .symbol {
+      font-family: var(--font);
+      font-size: 13px;
     }
 
-    .symbol,
-    .count {
-      font-weight: 700;
+    .nav .count {
+      font-family: var(--font);
+      font-size: 11px;
     }
 
     .rail-card {
-      display: grid;
-      gap: 10px;
+      margin-top: 20px;
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #f8fbff;
     }
 
+    .rail-label {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      font-family: var(--font);
+    }
+
     .rail-card strong {
+      display: block;
+      margin-top: 8px;
       font-size: 18px;
       line-height: 1.2;
     }
 
     .rail-card p {
-      margin: 0;
+      margin: 8px 0 0;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.45;
@@ -203,15 +208,19 @@
       margin: -20px -20px 20px;
       padding: 14px 20px;
       border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(18px);
     }
 
     .crumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       min-width: 0;
       width: 100%;
       max-width: 100%;
       color: var(--muted);
+      font-family: var(--font);
       font-size: 12px;
       white-space: nowrap;
       overflow: hidden;
@@ -221,9 +230,9 @@
     .top-actions {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
       gap: 8px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .btn {
@@ -238,7 +247,7 @@
       transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
     }
 
-    .btn:hover:not(:disabled) {
+    .btn:hover {
       transform: translateY(-1px);
       background: #3c84e6;
       border-color: #3c84e6;
@@ -252,11 +261,9 @@
       box-shadow: 0 2px 6px rgba(23, 32, 51, 0.06);
     }
 
-    .btn.danger {
-      border-color: #ffccc7;
-      background: #fff1f0;
-      color: var(--status-error);
-      box-shadow: none;
+    .btn.signal {
+      background: var(--acid);
+      color: #ffffff;
     }
 
     .workspace {
@@ -266,7 +273,7 @@
 
     .section {
       display: none;
-      animation: lift 300ms ease both;
+      animation: lift 360ms ease both;
     }
 
     .section.active {
@@ -274,8 +281,127 @@
     }
 
     @keyframes lift {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .headline {
+      min-height: 360px;
+      padding: 22px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.96)),
+        repeating-linear-gradient(110deg, transparent 0 16px, rgba(38, 115, 221, 0.035) 16px 17px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .control-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .control-head h2 {
+      margin: 8px 0 0;
+      font-size: 28px;
+      line-height: 1.1;
+      font-family: var(--font);
+    }
+
+    .control-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .control-card {
+      min-height: 96px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: var(--shadow-hard);
+    }
+
+    .control-card .label {
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .control-card strong {
+      display: block;
+      margin-top: 12px;
+      color: var(--ink);
+      font-size: 20px;
+      line-height: 1.1;
+    }
+
+    .suite-strip {
+      display: grid;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .suite-line {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr) 58px;
+      gap: 10px;
+      align-items: center;
+      color: var(--steel);
+      font-size: 12px;
+    }
+
+    .suite-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: #e9eef6;
+      overflow: hidden;
+    }
+
+    .suite-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--acid);
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 9px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #edf5ff;
+      color: var(--acid);
+      font-family: var(--font);
+      font-size: 12px;
     }
 
     h1,
@@ -283,6 +409,163 @@
     h3,
     p {
       margin-top: 0;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 28px 0 18px;
+      font-family: var(--font);
+      font-size: clamp(48px, 7vw, 104px);
+      line-height: 0.9;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: #344054;
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.55;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(84px, 1fr));
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .pipe-step {
+      min-height: 102px;
+      padding: 10px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .pipe-step b {
+      display: block;
+      font-family: var(--font);
+      font-size: 11px;
+      color: var(--moss);
+    }
+
+    .pipe-step span {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .status-plate {
+      display: grid;
+      align-content: space-between;
+      min-height: 360px;
+      padding: 22px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f9ff 100%);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+
+    .status-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .gate {
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: var(--acid);
+      color: #ffffff;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .score {
+      margin: 28px 0 8px;
+      font-family: var(--font);
+      font-size: 88px;
+      line-height: 0.9;
+    }
+
+    .status-plate p {
+      color: #344054;
+      line-height: 1.55;
+    }
+
+    .risk-stack {
+      display: grid;
+      gap: 8px;
+    }
+
+    .risk {
+      display: grid;
+      grid-template-columns: 22px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 13px;
+    }
+
+    .risk i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--acid);
+    }
+
+    .risk.warn i {
+      background: var(--amber);
+    }
+
+    .risk.stop i {
+      background: var(--brick);
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .metric {
+      min-height: 136px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow-hard);
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 18px;
+      font-family: var(--font);
+      font-size: 40px;
+      line-height: 0.95;
+    }
+
+    .metric small {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.4;
     }
 
     .panel {
@@ -295,7 +578,7 @@
 
     .panel-head {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       gap: 12px;
       padding: 16px;
@@ -311,72 +594,88 @@
     .panel-title h2,
     .panel-title h3 {
       margin: 0;
+      font-family: var(--font);
       font-size: 28px;
-      line-height: 1.05;
+      line-height: 1;
     }
 
     .panel-title p {
       margin: 0;
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.5;
     }
 
-    .body {
-      padding: 16px;
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.45fr);
-      gap: 18px;
-    }
-
-    .grid-3,
-    .grid-4 {
-      display: grid;
-      gap: 12px;
-    }
-
-    .grid-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .grid-4 {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .metric,
-    .card {
-      min-height: 122px;
-      padding: 16px;
-      border: 1px solid var(--line);
+    .chip,
+    .seg button {
+      min-height: 34px;
+      padding: 8px 10px;
+      border: 1px solid var(--line-dark);
       border-radius: 8px;
       background: #ffffff;
-      box-shadow: var(--shadow-hard);
+      color: var(--ink);
+      font-size: 12px;
     }
 
-    .metric .label,
-    .card .label,
-    .rail-label {
+    .chip.active,
+    .seg button.active {
+      background: var(--acid);
+      color: #ffffff;
+      border-color: var(--acid);
+    }
+
+    .seg {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: var(--paper-2);
+    }
+
+    .seg button {
+      border-color: transparent;
+    }
+
+    .table-wrap {
+      overflow: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+    }
+
+    th {
       color: var(--muted);
-      font-weight: 700;
+      font-family: var(--font);
+      font-size: 11px;
+      text-transform: uppercase;
+      background: #f5f7fb;
     }
 
-    .metric strong {
-      display: block;
-      margin-top: 16px;
-      font-size: 40px;
-      line-height: 0.95;
-      font-weight: 900;
+    tr {
+      transition: background 160ms ease;
     }
 
-    .metric small,
-    .card small {
-      display: block;
-      margin-top: 10px;
-      color: var(--muted);
-      line-height: 1.4;
+    tbody tr:hover {
+      background: #edf5ff;
     }
 
     .pill {
@@ -387,236 +686,71 @@
       padding: 4px 8px;
       border: 1px solid var(--line-dark);
       border-radius: 8px;
-      color: var(--steel);
-      background: #ffffff;
+      font-family: var(--font);
       font-size: 11px;
       white-space: nowrap;
     }
 
     .pill.pass {
-      border-color: #b7eb8f;
+      border-color: #b7ebc6;
       background: #f6ffed;
-      color: var(--status-success);
+      color: var(--moss);
     }
 
     .pill.block {
       border-color: #ffccc7;
       background: #fff1f0;
-      color: var(--status-error);
+      color: var(--brick);
     }
 
     .pill.warn {
       border-color: #ffe7ba;
       background: #fff7e6;
-      color: var(--status-warning);
+      color: #7b4b12;
     }
 
-    .pill.process {
-      border-color: #91caff;
-      background: #e6f4ff;
-      color: var(--status-processing);
+    .two-col {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 18px;
     }
 
-    .status-strip {
+    .queue-list {
       display: grid;
       gap: 10px;
-    }
-
-    .step-row {
-      display: grid;
-      grid-template-columns: 32px 1fr auto;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #ffffff;
-    }
-
-    .step-dot {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--status-default);
-      color: #3f3f3f;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .step-row.done .step-dot {
-      background: var(--status-success);
-      color: #ffffff;
-    }
-
-    .step-row.active .step-dot {
-      background: var(--status-processing);
-      color: #ffffff;
-    }
-
-    .step-row.blocked .step-dot {
-      background: var(--status-error);
-      color: #ffffff;
-    }
-
-    .step-row strong {
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .step-row span {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .field {
-      display: grid;
-      gap: 6px;
-    }
-
-    .field.full {
-      grid-column: 1 / -1;
-    }
-
-    .field label {
-      color: var(--steel);
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      width: 100%;
-      min-height: 38px;
-      margin: 0;
-      padding: 10px 11px;
-      border: 1px solid var(--line-dark);
-      border-radius: 8px;
-      background: #ffffff;
-      color: var(--ink);
-      outline: none;
-      transition: border-color 160ms ease, box-shadow 160ms ease;
-    }
-
-    .field textarea {
-      min-height: 82px;
-      resize: vertical;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--acid);
-      box-shadow: 0 0 0 3px rgba(38, 115, 221, 0.12);
-    }
-
-    .field.has-error input,
-    .field.has-error select,
-    .field.has-error textarea {
-      border-color: var(--status-error);
-      box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.1);
-    }
-
-    .field-error {
-      min-height: 16px;
-      color: var(--status-error);
-      font-size: 12px;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-top: 12px;
-    }
-
-    .table-wrap {
-      overflow: auto;
-    }
-
-    table {
-      width: 100%;
-      min-width: 880px;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 13px 14px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      vertical-align: top;
-      font-size: 13px;
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      background: #f5f7fb;
-    }
-
-    tbody tr:hover {
-      background: #edf5ff;
-    }
-
-    .row-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .mini {
-      min-height: 30px;
-      padding: 6px 8px;
-      border: 1px solid var(--line-dark);
-      border-radius: 8px;
-      background: #ffffff;
-      color: var(--ink);
-      font-size: 12px;
-    }
-
-    .mini.primary {
-      border-color: var(--acid);
-      color: var(--acid);
-    }
-
-    .mini.danger {
-      border-color: #ffccc7;
-      color: var(--status-error);
-      background: #fff1f0;
-    }
-
-    .case-grid {
-      display: grid;
-      gap: 10px;
-      max-height: 420px;
+      padding: 16px;
+      max-height: 740px;
       overflow: auto;
     }
 
     .case-item {
       display: grid;
-      gap: 7px;
+      gap: 8px;
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #ffffff;
+      text-align: left;
+    }
+
+    .case-item.active,
+    .case-item:hover {
+      border-color: var(--acid);
+      background: #edf5ff;
+    }
+
+    .case-item strong {
+      font-size: 14px;
     }
 
     .case-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
+    }
+
+    .review-surface {
+      padding: 16px;
     }
 
     .comparison {
@@ -627,7 +761,7 @@
     }
 
     .output {
-      min-height: 250px;
+      min-height: 280px;
       padding: 14px;
       border: 1px solid var(--line-dark);
       border-radius: 8px;
@@ -637,14 +771,15 @@
 
     .output h4 {
       margin: 0 0 10px;
-      color: var(--muted);
+      font-family: var(--font);
       font-size: 12px;
+      color: var(--muted);
       text-transform: uppercase;
     }
 
     .ad-canvas {
       position: relative;
-      min-height: 205px;
+      min-height: 210px;
       border: 1px solid var(--line);
       border-radius: 8px;
       overflow: hidden;
@@ -681,29 +816,112 @@
 
     .ad-copy b {
       display: block;
+      font-family: var(--font);
       font-size: 32px;
       line-height: 0.95;
-      font-weight: 900;
     }
 
     .ad-copy span {
       display: block;
       margin-top: 10px;
-      color: rgba(255, 255, 255, 0.78);
       font-size: 13px;
       line-height: 1.35;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .rubric {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .rubric button {
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #ffffff;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .rubric button.active {
+      border-color: var(--acid);
+      background: #edf5ff;
+      color: var(--acid);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #ffffff;
+      resize: vertical;
+    }
+
+    .decision-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .decision-bar button {
+      min-width: 96px;
+    }
+
+    .dataset-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+    }
+
+    .suite-map {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .suite-row {
+      display: grid;
+      grid-template-columns: 132px 1fr 70px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .bar {
+      height: 14px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f5f7fb;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--acid);
+    }
+
+    .report-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.42fr);
+      gap: 18px;
     }
 
     .audit-log {
       display: grid;
       gap: 10px;
-      max-height: 360px;
-      overflow: auto;
+      padding: 16px;
     }
 
     .log-line {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 76px 1fr;
       gap: 12px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--line);
@@ -711,7 +929,219 @@
     }
 
     .log-line time {
+      font-family: var(--font);
       color: var(--muted);
+    }
+
+    .workflow-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.45fr);
+      gap: 18px;
+    }
+
+    .workflow-steps {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .workflow-step {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      text-align: left;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .workflow-step:hover {
+      transform: translateY(-1px);
+    }
+
+    .workflow-step.is-active {
+      border-color: var(--status-processing);
+      background: #edf5ff;
+    }
+
+    .workflow-step.is-done {
+      border-color: #b7eb8f;
+      background: #f6ffed;
+    }
+
+    .workflow-step.is-error {
+      border-color: #ffccc7;
+      background: #fff1f0;
+    }
+
+    .workflow-index,
+    .status-dot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .workflow-index {
+      width: 28px;
+      height: 28px;
+      background: var(--status-default);
+      color: #3f3f3f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .workflow-step.is-active .workflow-index {
+      background: var(--status-processing);
+      color: #ffffff;
+    }
+
+    .workflow-step.is-done .workflow-index {
+      background: var(--status-success);
+      color: #ffffff;
+    }
+
+    .workflow-step.is-error .workflow-index {
+      background: var(--status-error);
+      color: #ffffff;
+    }
+
+    .workflow-copy {
+      min-width: 0;
+    }
+
+    .workflow-copy strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .workflow-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .workflow-state {
+      min-width: 92px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .workflow-action {
+      display: grid;
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .workflow-current {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .workflow-current .rail-label {
+      margin-bottom: 8px;
+    }
+
+    .workflow-current h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .workflow-current p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .workflow-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--steel);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      min-height: 38px;
+      margin: 0;
+      padding: 10px 11px;
+      border: 1px solid var(--line-dark);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .field textarea {
+      min-height: 72px;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: var(--acid);
+      box-shadow: 0 0 0 3px rgba(38, 115, 221, 0.12);
+    }
+
+    .field.has-error input,
+    .field.has-error textarea {
+      border-color: var(--status-error);
+      box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.1);
+    }
+
+    .field-error {
+      min-height: 16px;
+      color: var(--status-error);
+      font-size: 12px;
+    }
+
+    .workflow-controls,
+    .error-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .error-controls {
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .evidence-log {
+      display: grid;
+      gap: 10px;
+      max-height: 320px;
+      overflow: auto;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .evidence-log .log-line:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
     }
 
     .toast {
@@ -719,7 +1149,7 @@
       right: 22px;
       bottom: 22px;
       z-index: 20;
-      max-width: 390px;
+      max-width: 360px;
       padding: 14px 16px;
       border: 1px solid var(--line-dark);
       border-radius: 8px;
@@ -737,21 +1167,32 @@
       transform: translateY(0);
     }
 
-    .empty {
-      padding: 28px;
-      border: 1px dashed var(--line-dark);
-      border-radius: 8px;
-      color: var(--muted);
-      background: #fafcff;
-      text-align: center;
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     @media (max-width: 1160px) {
-      .grid-2,
-      .grid-3,
-      .grid-4,
-      .comparison {
+      .hero-grid,
+      .two-col,
+      .dataset-grid,
+      .report-grid,
+      .workflow-layout {
         grid-template-columns: 1fr;
+      }
+
+      .pipeline,
+      .grid-4,
+      .rubric,
+      .control-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -780,17 +1221,29 @@
         justify-content: flex-start;
       }
 
-      .form-grid {
+      .grid-4,
+      .pipeline,
+      .comparison,
+      .rubric,
+      .control-grid {
         grid-template-columns: 1fr;
       }
 
-      .step-row {
+      .control-head {
+        flex-direction: column;
+      }
+
+      .workflow-step {
         grid-template-columns: 32px 1fr;
       }
 
-      .step-row .pill {
+      .workflow-state {
         grid-column: 2;
-        justify-self: start;
+        text-align: left;
+      }
+
+      h1 {
+        font-size: 52px;
       }
     }
   </style>
@@ -803,380 +1256,287 @@
           <div class="brand">Evalove</div>
           <div class="version">1.0</div>
         </div>
-        <div class="subtitle">Skill Evaluation workbench for dataset, experiment, run, review, and gate.</div>
+        <div class="subtitle">Skill Evaluation workbench for release gate, review queue, and run evidence.</div>
       </div>
 
       <nav class="nav" aria-label="Sections">
-        <button class="active" data-section="overview"><span class="symbol">01</span><span>总览</span><span class="count" id="navGate">Gate</span></button>
-        <button data-section="datasets"><span class="symbol">02</span><span>数据集</span><span class="count" id="navDataset">v3</span></button>
-        <button data-section="experiments"><span class="symbol">03</span><span>实验</span><span class="count" id="navExperiment">draft</span></button>
-        <button data-section="runs"><span class="symbol">04</span><span>运行</span><span class="count" id="navRuns">0</span></button>
-        <button data-section="review"><span class="symbol">05</span><span>评审队列</span><span class="count" id="navReview">0</span></button>
-        <button data-section="report"><span class="symbol">06</span><span>报告</span><span class="count" id="navReport">CSV</span></button>
+        <button class="active" data-section="overview"><span class="symbol">01</span><span>总览</span><span class="count">Gate</span></button>
+        <button data-section="workflow"><span class="symbol">02</span><span>流程演示</span><span class="count">Happy</span></button>
+        <button data-section="experiments"><span class="symbol">03</span><span>实验</span><span class="count">4</span></button>
+        <button data-section="review"><span class="symbol">04</span><span>评审队列</span><span class="count" id="queueCount">6</span></button>
+        <button data-section="datasets"><span class="symbol">05</span><span>数据集</span><span class="count">v3</span></button>
+        <button data-section="report"><span class="symbol">06</span><span>报告</span><span class="count">CSV</span></button>
       </nav>
 
       <div class="rail-card">
         <div class="rail-label">Active flow</div>
         <strong>Dataset Version -> Experiment -> Run -> Review -> Gate</strong>
-        <p id="railHint">每个页面都有自己的操作，状态会驱动下一步。</p>
+        <p>固定数据集版本，baseline / candidate 独立运行，comparison 承载人工评审。</p>
       </div>
     </aside>
 
     <main>
       <header class="topbar">
-        <div class="crumb" id="crumb">Skill Evaluation MVP / No active experiment</div>
+        <div class="crumb">Skill Evaluation MVP / Release Gate Dataset v3 / Candidate 2026.05.25-r7</div>
         <div class="top-actions">
+          <button class="btn secondary" id="simulateRun">运行 latest runs</button>
           <button class="btn secondary" id="exportCsv">导出 CSV</button>
-          <button class="btn secondary" id="sendSeatalk" hidden>发送 Seatalk 预览</button>
-          <button class="btn" id="nextAction">下一步</button>
+          <button class="btn signal" id="notifyBtn">发送 Seatalk 预览</button>
         </div>
       </header>
 
       <div class="workspace">
         <section class="section active" id="overview">
-          <div class="grid-2">
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">
-                  <h2>Release Gate Overview</h2>
-                  <p>总览只做进度和下一步入口，实际操作分布在各业务页面。</p>
+          <div class="hero-grid">
+            <div class="headline">
+              <div class="control-head">
+                <div>
+                  <div class="kicker">RELEASE EVAL / RECORD 1.0</div>
+                  <h2>Release Eval / MY image relayout</h2>
+                  <p>Candidate r7 对比线上 baseline，数据集固定为 Release Gate Dataset v3。</p>
                 </div>
-                <span class="pill" id="overviewStatus">not_evaluated</span>
+                <span class="pill warn">reviewing</span>
               </div>
-              <div class="body">
-                <div class="grid-4">
-                  <div class="metric"><div class="label">Dataset Version</div><strong id="metricDataset">-</strong><small id="metricDatasetSub">No frozen dataset selected</small></div>
-                  <div class="metric"><div class="label">Experiment</div><strong id="metricExperiment">-</strong><small id="metricExperimentSub">Create a release eval</small></div>
-                  <div class="metric"><div class="label">Runs</div><strong id="metricRuns">0</strong><small id="metricRunsSub">baseline + candidate</small></div>
-                  <div class="metric"><div class="label">Review</div><strong id="metricReview">0/0</strong><small id="metricReviewSub">required comparisons</small></div>
-                </div>
-                <div class="status-strip" id="flowSteps" style="margin-top:16px;"></div>
+
+              <div class="control-grid" aria-label="Experiment summary">
+                <div class="control-card"><div class="label">Dataset</div><strong>RG-v3</strong></div>
+                <div class="control-card"><div class="label">Candidate</div><strong>2026.05-r7</strong></div>
+                <div class="control-card"><div class="label">Baseline</div><strong>live</strong></div>
+                <div class="control-card"><div class="label">Reviewer</div><strong>36 / 42</strong></div>
+              </div>
+
+              <div class="suite-strip" aria-label="Suite pass rate">
+                <div class="suite-line"><span>P0 required</span><div class="suite-bar"><span style="width:86%; background: var(--brick);"></span></div><b>6/7</b></div>
+                <div class="suite-line"><span>Regression</span><div class="suite-bar"><span style="width:91%; background: var(--amber);"></span></div><b>10/11</b></div>
+                <div class="suite-line"><span>General</span><div class="suite-bar"><span style="width:94%;"></span></div><b>19/20</b></div>
+              </div>
+
+              <div class="pipeline" aria-label="Evaluation pipeline">
+                <div class="pipe-step"><b>01</b><span>Dataset Version</span></div>
+                <div class="pipe-step"><b>02</b><span>Experiment</span></div>
+                <div class="pipe-step"><b>03</b><span>Variant Run</span></div>
+                <div class="pipe-step"><b>04</b><span>Comparison</span></div>
+                <div class="pipe-step"><b>05</b><span>Review Queue</span></div>
+                <div class="pipe-step"><b>06</b><span>Report / Gate</span></div>
               </div>
             </div>
 
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">
-                  <h3>Gate Snapshot</h3>
-                  <p>Gate 会读取最新 review 和 report。</p>
+            <div class="status-plate">
+              <div>
+                <div class="status-head">
+                  <div>
+                    <div class="rail-label">Current gate</div>
+                    <div class="score" id="gateScore">92%</div>
+                  </div>
+                  <div class="gate" id="gateBadge">BLOCKED</div>
                 </div>
-                <span class="pill" id="gateBadge">not_evaluated</span>
+                <p id="gateNarrative">总体通过率达标，但仍有 1 个 P0 failed 和 2 个 not sure。Gate 不能放行。</p>
               </div>
-              <div class="body">
-                <div class="metric" style="min-height:150px;">
-                  <div class="label">Overall pass rate</div>
-                  <strong id="gateScore">-</strong>
-                  <small id="gateNarrative">完成 review 后生成 gate 结果。</small>
-                </div>
-                <div class="audit-log" id="overviewAudit" style="margin-top:14px;"></div>
+              <div class="risk-stack">
+                <div class="risk stop"><i></i><span>P0 failed</span><b id="p0Risk">1</b></div>
+                <div class="risk warn"><i></i><span>Not Sure</span><b id="nsRisk">2</b></div>
+                <div class="risk"><i></i><span>Skip Rate</span><b>3%</b></div>
               </div>
             </div>
           </div>
+
+          <div class="grid-4">
+            <div class="metric"><div class="label">Dataset Version</div><strong>RG-v3</strong><small>42 cases / 7 suites / frozen snapshot</small></div>
+            <div class="metric"><div class="label">Variant Runs</div><strong id="runMetric">84</strong><small>baseline + candidate, latest attempt tracked</small></div>
+            <div class="metric"><div class="label">Review Queue</div><strong id="reviewMetric">36/42</strong><small>6 comparisons still need attention</small></div>
+            <div class="metric"><div class="label">Gate Rules</div><strong>6</strong><small>P0, regression, skip, not sure, runner, general</small></div>
+          </div>
         </section>
 
-        <section class="section" id="datasets">
-          <div class="grid-2">
+        <section class="section" id="workflow">
+          <div class="workflow-layout">
             <div class="panel">
               <div class="panel-head">
                 <div class="panel-title">
-                  <h2>Dataset Library</h2>
-                  <p>创建 draft、添加 cases、冻结版本。Experiment 只能绑定 frozen Dataset Version。</p>
+                  <h2>User Happy Path Demo</h2>
+                  <p>从创建 release eval 到 gate 放行的完整演示；异常仅覆盖必填和格式输入错误。</p>
                 </div>
-                <span class="pill process" id="datasetSelectedPill">selected</span>
+                <span class="pill" id="workflowBadge">ready</span>
               </div>
-              <div class="body">
-                <div class="form-grid">
-                  <div class="field" data-field="datasetName">
-                    <label for="datasetName">Dataset Name</label>
-                    <input id="datasetName" autocomplete="off" />
-                    <span class="field-error" id="datasetNameError"></span>
-                  </div>
-                  <div class="field" data-field="datasetOwner">
-                    <label for="datasetOwner">Owner</label>
-                    <input id="datasetOwner" autocomplete="off" />
-                    <span class="field-error" id="datasetOwnerError"></span>
-                  </div>
-                  <div class="field full" data-field="datasetDescription">
-                    <label for="datasetDescription">Description</label>
-                    <textarea id="datasetDescription"></textarea>
-                    <span class="field-error" id="datasetDescriptionError"></span>
-                  </div>
-                  <div class="field full" data-field="datasetChangelog">
-                    <label for="datasetChangelog">Freeze Changelog</label>
-                    <textarea id="datasetChangelog">Update release gate snapshot for candidate evaluation.</textarea>
-                    <span class="field-error" id="datasetChangelogError"></span>
-                  </div>
-                </div>
-                <div class="toolbar">
-                  <button class="btn" id="newDataset">新建 Dataset Draft</button>
-                  <button class="btn secondary" id="saveDataset">保存 Draft</button>
-                  <button class="btn secondary" id="freezeDataset">冻结 Version</button>
-                  <button class="btn danger" id="deleteDataset">删除 Draft</button>
-                </div>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Dataset</th><th>Status</th><th>Versions</th><th>Cases</th><th>Owner</th><th>Actions</th></tr></thead>
-                  <tbody id="datasetRows"></tbody>
-                </table>
-              </div>
+              <div class="workflow-steps" id="workflowSteps" aria-label="Happy path workflow steps"></div>
             </div>
 
             <div class="panel">
               <div class="panel-head">
                 <div class="panel-title">
-                  <h3>Case Library</h3>
-                  <p>添加或移除 draft cases。Frozen version 只看 snapshot。</p>
+                  <h3>Demo Console</h3>
+                  <p>使用默认值可直接播放 happy path，也可以手动触发简单输入错误。</p>
                 </div>
               </div>
-              <div class="body">
-                <div class="case-grid" id="caseLibrary"></div>
+              <div class="workflow-action">
+                <div class="workflow-current">
+                  <div class="rail-label">Current step</div>
+                  <h3 id="workflowTitle">Bind Dataset Version</h3>
+                  <p id="workflowDesc">选择已冻结的数据集版本，作为 baseline 和 candidate 的共同输入。</p>
+                </div>
+
+                <div class="workflow-form" aria-label="Workflow input form">
+                  <div class="field" data-field="dataset">
+                    <label for="demoDataset">Dataset Version</label>
+                    <input id="demoDataset" value="RG-v3" autocomplete="off" />
+                    <span class="field-error" id="demoDatasetError"></span>
+                  </div>
+                  <div class="field" data-field="experiment">
+                    <label for="demoExperiment">Experiment Name</label>
+                    <input id="demoExperiment" value="Release Eval / MY image relayout" autocomplete="off" />
+                    <span class="field-error" id="demoExperimentError"></span>
+                  </div>
+                  <div class="field" data-field="candidate">
+                    <label for="demoCandidate">Candidate Version</label>
+                    <input id="demoCandidate" value="2026.05-r7" autocomplete="off" />
+                    <span class="field-error" id="demoCandidateError"></span>
+                  </div>
+                  <div class="field" data-field="comment">
+                    <label for="demoComment">Review Comment</label>
+                    <textarea id="demoComment">All required comparisons passed. No P0 failed, no not_sure left.</textarea>
+                    <span class="field-error" id="demoCommentError"></span>
+                  </div>
+                </div>
+
+                <div class="workflow-controls">
+                  <button class="btn signal" id="playWorkflow">播放 Happy Path</button>
+                  <button class="btn secondary" id="advanceWorkflow">下一步</button>
+                  <button class="btn secondary" id="resetWorkflow">重置</button>
+                </div>
+
+                <div class="error-controls" aria-label="Input error demos">
+                  <button class="btn secondary" id="demoMissingDataset">异常：缺少 Dataset</button>
+                  <button class="btn secondary" id="demoBadCandidate">异常：Candidate 格式错误</button>
+                  <button class="btn secondary" id="demoBlankComment">异常：Review Comment 为空</button>
+                </div>
+
+                <div class="evidence-log" id="workflowLog" aria-label="Workflow evidence log">
+                  <div class="log-line"><time>ready</time><span>Demo initialized with valid release eval inputs.</span></div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         <section class="section" id="experiments">
-          <div class="grid-2">
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">
-                  <h2>Experiment Management</h2>
-                  <p>创建、编辑、复制、删除 draft experiment，并从这里启动 runs。</p>
-                </div>
-                <span class="pill" id="experimentSelectedPill">draft</span>
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">
+                <h2>Experiment Management</h2>
+                <p>按 PRD 的 gate_status、dataset_version、suite result 组织实验列表。</p>
               </div>
-              <div class="body">
-                <div class="form-grid">
-                  <div class="field" data-field="experimentName">
-                    <label for="experimentName">Experiment Name</label>
-                    <input id="experimentName" autocomplete="off" />
-                    <span class="field-error" id="experimentNameError"></span>
-                  </div>
-                  <div class="field" data-field="experimentSkill">
-                    <label for="experimentSkill">Skill</label>
-                    <input id="experimentSkill" autocomplete="off" />
-                    <span class="field-error" id="experimentSkillError"></span>
-                  </div>
-                  <div class="field" data-field="candidateVersion">
-                    <label for="candidateVersion">Candidate Version</label>
-                    <input id="candidateVersion" placeholder="2026.05-r7" autocomplete="off" />
-                    <span class="field-error" id="candidateVersionError"></span>
-                  </div>
-                  <div class="field">
-                    <label for="baselineVersion">Baseline Version</label>
-                    <input id="baselineVersion" autocomplete="off" />
-                    <span class="field-error"></span>
-                  </div>
-                  <div class="field" data-field="experimentDataset">
-                    <label for="experimentDataset">Dataset Version</label>
-                    <select id="experimentDataset"></select>
-                    <span class="field-error" id="experimentDatasetError"></span>
-                  </div>
-                  <div class="field" data-field="experimentOwner">
-                    <label for="experimentOwner">Owner</label>
-                    <input id="experimentOwner" autocomplete="off" />
-                    <span class="field-error" id="experimentOwnerError"></span>
-                  </div>
-                </div>
-                <div class="toolbar">
-                  <button class="btn" id="newExperiment">新建 Experiment</button>
-                  <button class="btn secondary" id="saveExperiment">保存 Draft</button>
-                  <button class="btn secondary" id="duplicateExperiment">复制</button>
-                  <button class="btn secondary" id="runExperiment">运行 latest</button>
-                  <button class="btn danger" id="deleteExperiment">删除 Draft</button>
-                </div>
+              <div class="filters" aria-label="Experiment filters">
+                <button class="chip active" data-filter="all">全部</button>
+                <button class="chip" data-filter="blocked">Blocked</button>
+                <button class="chip" data-filter="passed">Passed</button>
+                <button class="chip" data-filter="running">Running</button>
               </div>
             </div>
-
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">
-                  <h3>Experiment List</h3>
-                  <p>点击 Edit 将数据带入左侧表单。</p>
-                </div>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Experiment</th><th>Dataset</th><th>Status</th><th>Gate</th><th>Actions</th></tr></thead>
-                  <tbody id="experimentRows"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section" id="runs">
-          <div class="grid-2">
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">
-                  <h2>Runs & Comparisons</h2>
-                  <p>运行 baseline / candidate，完成后生成 comparison。Rerun 会新增 attempt。</p>
-                </div>
-                <span class="pill process" id="runSummaryPill">ready</span>
-              </div>
-              <div class="body">
-                <div class="grid-3">
-                  <div class="metric"><div class="label">Runs</div><strong id="runCount">0</strong><small>latest attempts</small></div>
-                  <div class="metric"><div class="label">Comparisons</div><strong id="comparisonCount">0</strong><small>review objects</small></div>
-                  <div class="metric"><div class="label">Status</div><strong id="runStatusMetric">draft</strong><small>experiment lifecycle</small></div>
-                </div>
-                <div class="toolbar">
-                  <button class="btn" id="startRuns">运行 latest</button>
-                  <button class="btn secondary" id="rerunFailed">重跑 failed</button>
-                  <button class="btn secondary" id="cancelExperiment">取消 Experiment</button>
-                </div>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Case</th><th>Variant</th><th>Attempt</th><th>Status</th><th>Duration</th><th>Actions</th></tr></thead>
-                  <tbody id="runRows"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">
-                  <h3>Comparison Preview</h3>
-                  <p>生成后进入 Review Queue。</p>
-                </div>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead><tr><th>Case</th><th>Suite</th><th>Review</th><th>Decision</th></tr></thead>
-                  <tbody id="comparisonRows"></tbody>
-                </table>
-              </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Experiment</th>
+                    <th>Skill</th>
+                    <th>Candidate / Baseline</th>
+                    <th>Dataset</th>
+                    <th>Status</th>
+                    <th>Gate</th>
+                    <th>Suite Signal</th>
+                    <th>Owner</th>
+                  </tr>
+                </thead>
+                <tbody id="experimentRows"></tbody>
+              </table>
             </div>
           </div>
         </section>
 
         <section class="section" id="review">
-          <div class="grid-2">
+          <div class="two-col">
             <div class="panel">
               <div class="panel-head">
                 <div class="panel-title">
-                  <h2>Review Queue</h2>
-                  <p>提交 structured review。Fail / Not Sure / Skip 有对应必填校验。</p>
+                  <h3>Review Queue</h3>
+                  <p>同一 comparison 同一时间只允许一个 active reviewer。</p>
                 </div>
-                <span class="pill process" id="reviewPill">pending</span>
               </div>
-              <div class="body">
-                <div id="reviewList" class="case-grid"></div>
-              </div>
+              <div class="queue-list" id="caseList"></div>
             </div>
 
             <div class="panel">
               <div class="panel-head">
                 <div class="panel-title">
-                  <h3 id="reviewTitle">No comparison selected</h3>
-                  <p id="reviewCriteria">Run an experiment first.</p>
+                  <h2 id="caseTitle">MY banner - subject retained</h2>
+                  <p id="caseCriteria">Acceptance: 主体完整，尺寸 1200x360，MY 文案不截断。</p>
                 </div>
-                <span class="pill" id="reviewState">pending</span>
+                <span class="pill warn" id="caseState">needs review</span>
               </div>
-              <div class="body">
+              <div class="review-surface">
                 <div class="comparison">
                   <div class="output">
                     <h4>Baseline output</h4>
                     <div class="ad-canvas">
-                      <div class="ad-copy"><b>Baseline Deal</b><span>Live output generated from current published skill.</span></div>
+                      <div class="ad-copy"><b>MY Payday Deal</b><span>Baseline keeps product visible but loses brand badge spacing.</span></div>
                       <div class="product"></div>
                     </div>
                   </div>
                   <div class="output">
                     <h4>Candidate output</h4>
                     <div class="ad-canvas alt">
-                      <div class="ad-copy"><b id="candidateHeadline">Candidate Deal</b><span id="candidateNote">Candidate output waits for reviewer decision.</span></div>
+                      <div class="ad-copy"><b id="candidateHeadline">Payday Deal</b><span id="candidateNote">Candidate improves contrast; reviewer must confirm no text cutoff.</span></div>
                       <div class="product"></div>
                     </div>
                   </div>
                 </div>
 
-                <div class="form-grid">
-                  <div class="field" data-field="reviewDecision">
-                    <label for="reviewDecision">Decision</label>
-                    <select id="reviewDecision">
-                      <option value="">Select decision</option>
-                      <option value="passed">Pass</option>
-                      <option value="failed">Fail</option>
-                      <option value="not_sure">Not Sure</option>
-                      <option value="skipped">Skip</option>
-                    </select>
-                    <span class="field-error" id="reviewDecisionError"></span>
-                  </div>
-                  <div class="field" data-field="reviewIssue">
-                    <label for="reviewIssue">Issue Type</label>
-                    <select id="reviewIssue">
-                      <option value="">None</option>
-                      <option value="wrong_size">wrong_size</option>
-                      <option value="subject_lost">subject_lost</option>
-                      <option value="text_cutoff">text_cutoff</option>
-                    </select>
-                    <span class="field-error" id="reviewIssueError"></span>
-                  </div>
-                  <div class="field" data-field="reviewSeverity">
-                    <label for="reviewSeverity">Severity</label>
-                    <select id="reviewSeverity">
-                      <option value="">None</option>
-                      <option value="minor">minor</option>
-                      <option value="major">major</option>
-                      <option value="blocker">blocker</option>
-                    </select>
-                    <span class="field-error" id="reviewSeverityError"></span>
-                  </div>
-                  <div class="field" data-field="skipReason">
-                    <label for="skipReason">Skip Reason</label>
-                    <input id="skipReason" autocomplete="off" />
-                    <span class="field-error" id="skipReasonError"></span>
-                  </div>
-                  <div class="field full" data-field="reviewComment">
-                    <label for="reviewComment">Comment</label>
-                    <textarea id="reviewComment"></textarea>
-                    <span class="field-error" id="reviewCommentError"></span>
-                  </div>
+                <div class="seg" role="tablist" aria-label="Decision">
+                  <button class="active" data-decision="passed">Pass</button>
+                  <button data-decision="failed">Fail</button>
+                  <button data-decision="not_sure">Not Sure</button>
+                  <button data-decision="skipped">Skip</button>
                 </div>
-                <div class="toolbar">
-                  <button class="btn" id="submitReview">提交 / 更新 Review</button>
-                  <button class="btn secondary" id="nextReview">下一条</button>
+
+                <div class="rubric" aria-label="Rubric scores">
+                  <button class="active">output_validity<br><b>OK</b></button>
+                  <button class="active">requirement_following<br><b>OK</b></button>
+                  <button>visual_quality<br><b>Check</b></button>
+                  <button>content_accuracy<br><b>Check</b></button>
+                  <button>baseline_comparison<br><b>same</b></button>
+                </div>
+
+                <label class="sr-only" for="reviewComment">Review comment</label>
+                <textarea id="reviewComment">Candidate keeps the product visible. Need one more pass for MY localized copy length.</textarea>
+                <div class="decision-bar">
+                  <button class="btn signal" id="submitReview">提交 Review</button>
+                  <button class="btn secondary" id="nextCase">下一条</button>
+                  <button class="btn secondary" id="rerunCase">重跑 candidate</button>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="section" id="report">
-          <div class="grid-2">
+        <section class="section" id="datasets">
+          <div class="dataset-grid">
             <div class="panel">
               <div class="panel-head">
                 <div class="panel-title">
-                  <h2>Experiment Report</h2>
-                  <p>从 latest reviews 计算 gate。导出和通知只在 report 生成后可用。</p>
+                  <h2>Dataset Library</h2>
+                  <p>Experiment 必须绑定 Dataset Version；tag 只负责检索和组装。</p>
                 </div>
-                <span class="pill" id="reportStatus">not_generated</span>
-              </div>
-              <div class="body">
-                <div class="grid-3">
-                  <div class="metric"><div class="label">Gate</div><strong id="reportGate">-</strong><small id="reportGateReason">Generate report after review.</small></div>
-                  <div class="metric"><div class="label">Pass Rate</div><strong id="reportPassRate">-</strong><small>counted comparisons</small></div>
-                  <div class="metric"><div class="label">Risk</div><strong id="reportRisk">-</strong><small>P0 / not sure / skip</small></div>
-                </div>
-                <div class="field full" data-field="exceptionNote" style="margin-top:14px;">
-                  <label for="exceptionNote">Exception Note</label>
-                  <textarea id="exceptionNote">No release exception requested.</textarea>
-                  <span class="field-error" id="exceptionNoteError"></span>
-                </div>
-                <div class="toolbar">
-                  <button class="btn" id="generateReport">生成 Report</button>
-                  <button class="btn secondary" id="saveException">保存 Exception Note</button>
-                  <button class="btn danger" id="deleteDraftReport">删除 Draft Report</button>
-                </div>
+                <button class="btn secondary" id="freezeDataset">冻结新版本</button>
               </div>
               <div class="table-wrap">
                 <table>
-                  <thead><tr><th>Risk</th><th>Count</th><th>Evidence</th><th>Action</th></tr></thead>
-                  <tbody id="riskRows"></tbody>
+                  <thead>
+                    <tr><th>Dataset</th><th>Version</th><th>Cases</th><th>Snapshot</th><th>Owner</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Release Gate Dataset</td><td>v3</td><td>42</td><td><span class="pill pass">frozen</span></td><td>Platform Admin</td></tr>
+                    <tr><td>Regression Dataset</td><td>v8</td><td>128</td><td><span class="pill pass">frozen</span></td><td>Skill QA</td></tr>
+                    <tr><td>Bad Case Dataset</td><td>v2</td><td>31</td><td><span class="pill warn">draft</span></td><td>Design Ops</td></tr>
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -1184,12 +1544,58 @@
             <div class="panel">
               <div class="panel-head">
                 <div class="panel-title">
-                  <h3>Audit Trail</h3>
-                  <p>所有 Create / Update / Delete 都写入记录。</p>
+                  <h3>Suite 分布</h3>
+                  <p>用于 gate rules 和报告拆解。</p>
                 </div>
               </div>
-              <div class="body">
-                <div class="audit-log" id="auditLog"></div>
+              <div class="suite-map">
+                <div class="suite-row"><b>general</b><div class="bar"><span style="width: 80%"></span></div><span>20</span></div>
+                <div class="suite-row"><b>p0_required</b><div class="bar"><span style="width: 28%; background: var(--brick)"></span></div><span>7</span></div>
+                <div class="suite-row"><b>regression</b><div class="bar"><span style="width: 44%; background: var(--amber)"></span></div><span>11</span></div>
+                <div class="suite-row"><b>market_my</b><div class="bar"><span style="width: 36%"></span></div><span>9</span></div>
+                <div class="suite-row"><b>bad_case</b><div class="bar"><span style="width: 20%; background: var(--blueprint)"></span></div><span>5</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="report">
+          <div class="report-grid">
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h2>Experiment Report</h2>
+                  <p>给 Skill Owner 和 Approver 的发布判断证据。</p>
+                </div>
+                <span class="pill block">gate_status: blocked</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Risk</th><th>Count</th><th>Evidence</th><th>Action</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>P0 failed</td><td>1</td><td>MY banner - subject retained</td><td>Fix candidate or mark exception</td></tr>
+                    <tr><td>Not Sure</td><td>2</td><td>ID locale copy length, mixed asset crop</td><td>Owner adjudication</td></tr>
+                    <tr><td>Runner failed</td><td>0</td><td>No active failure</td><td>None</td></tr>
+                    <tr><td>Skip rate</td><td>3%</td><td>Below 5% threshold</td><td>Allowed</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <div class="panel-title">
+                  <h3>Audit trail</h3>
+                  <p>重跑和评审都保留记录。</p>
+                </div>
+              </div>
+              <div class="audit-log" id="auditLog">
+                <div class="log-line"><time>09:12</time><span>Dataset Version RG-v3 bound to experiment.</span></div>
+                <div class="log-line"><time>09:19</time><span>84 latest runs completed. Status moved to reviewing.</span></div>
+                <div class="log-line"><time>09:35</time><span>Reviewer submitted 36 structured reviews.</span></div>
+                <div class="log-line"><time>09:41</time><span>Gate blocked by P0 failed and not_sure.</span></div>
               </div>
             </div>
           </div>
@@ -1201,49 +1607,146 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
-    const appState = {
-      cases: [
-        { id: "case-1", name: "MY banner - subject retained", priority: "P0", suite: "p0_required", tags: ["MY", "image_relayout"], criteria: "主体完整，尺寸 1200x360，MY 文案不截断。" },
-        { id: "case-2", name: "ID campaign - long copy", priority: "P1", suite: "regression", tags: ["ID", "text_cutoff"], criteria: "印尼语长文案完整展示，CTA 不遮挡商品。" },
-        { id: "case-3", name: "Mixed asset - packshot crop", priority: "P1", suite: "bad_case", tags: ["mixed_asset"], criteria: "packshot 不被裁切，背景符合 campaign brief。" },
-        { id: "case-4", name: "Golden case - brand color", priority: "P2", suite: "golden", tags: ["golden"], criteria: "保留品牌主色，输出格式为 image_url。" },
-        { id: "case-5", name: "P0 - wrong size guard", priority: "P0", suite: "p0_required", tags: ["wrong_size"], criteria: "输出必须为 1200x360，不能出现 1px 尺寸偏差。" },
-        { id: "case-6", name: "Regression - subject lost", priority: "P1", suite: "regression", tags: ["subject_lost"], criteria: "商品主体和价格利益点都必须可见。" }
-      ],
-      datasets: [
-        { id: "dataset-1", name: "Release Gate Dataset", description: "Release gate stable set.", owner: "Platform Admin", status: "frozen", draftCaseIds: ["case-1", "case-2", "case-3", "case-4", "case-5", "case-6"] },
-        { id: "dataset-2", name: "Bad Case Dataset", description: "Draft bad case set.", owner: "Design Ops", status: "draft", draftCaseIds: ["case-3", "case-6"] }
-      ],
-      datasetVersions: [
-        { id: "dv-1", datasetId: "dataset-1", version: "RG-v3", status: "frozen", caseIds: ["case-1", "case-2", "case-3", "case-4", "case-5", "case-6"], changelog: "Seed release gate snapshot." }
-      ],
-      experiments: [
-        { id: "exp-1", name: "Release Eval / MY image relayout", skill: "image_relayout", candidate: "2026.05-r7", baseline: "live", datasetVersionId: "dv-1", owner: "Xinyi", status: "draft", gateStatus: "not_evaluated" }
-      ],
-      runs: [],
-      comparisons: [],
-      reviews: [],
-      reports: [],
-      auditLogs: [
-        { time: "seed", text: "Seed data loaded. Ready for dataset -> experiment -> run -> review -> report." }
-      ],
-      selectedDatasetId: "dataset-1",
-      selectedDatasetVersionId: "dv-1",
-      selectedExperimentId: "exp-1",
-      selectedComparisonId: null
+    const experiments = [
+      {
+        name: "Release Eval / MY image relayout",
+        skill: "image_relayout",
+        versions: "candidate r7 / baseline live",
+        dataset: "Release Gate v3",
+        status: "reviewing",
+        gate: "blocked",
+        suite: "P0 failed 1 / not sure 2",
+        owner: "Xinyi"
+      },
+      {
+        name: "Regression Eval / copy safety",
+        skill: "copy_guard",
+        versions: "candidate r3 / baseline live",
+        dataset: "Regression v8",
+        status: "completed",
+        gate: "passed",
+        suite: "128/128 counted",
+        owner: "Design QA"
+      },
+      {
+        name: "Golden Eval / prompt rewrite",
+        skill: "brief_refiner",
+        versions: "candidate r2 / baseline live",
+        dataset: "Golden v5",
+        status: "running",
+        gate: "not_evaluated",
+        suite: "runs 48%",
+        owner: "Platform"
+      },
+      {
+        name: "Bad Case Eval / mixed asset",
+        skill: "asset_composer",
+        versions: "candidate r4 / no baseline",
+        dataset: "Bad Case v2",
+        status: "reviewing",
+        gate: "failed",
+        suite: "general 82%",
+        owner: "Skill Ops"
+      }
+    ];
+
+    const queueCases = [
+      {
+        title: "MY banner - subject retained",
+        criteria: "Acceptance: 主体完整，尺寸 1200x360，MY 文案不截断。",
+        state: "P0 / not_sure",
+        headline: "Payday Deal",
+        note: "Candidate improves contrast; reviewer must confirm no text cutoff."
+      },
+      {
+        title: "ID campaign - long copy",
+        criteria: "Acceptance: 印尼语长文案完整展示，CTA 不遮挡商品。",
+        state: "regression",
+        headline: "Promo Akhir Bulan",
+        note: "Candidate keeps layout stable but CTA is close to safe margin."
+      },
+      {
+        title: "Mixed asset - packshot crop",
+        criteria: "Acceptance: packshot 不被裁切，背景符合 campaign brief。",
+        state: "bad_case",
+        headline: "Fresh Bundle",
+        note: "Candidate crop improved; packshot shadow may be too heavy."
+      },
+      {
+        title: "Golden case - brand color",
+        criteria: "Acceptance: 保留品牌主色，输出格式为 image_url。",
+        state: "golden",
+        headline: "Brand Week",
+        note: "Candidate matches brand palette and output type."
+      },
+      {
+        title: "P0 - wrong size guard",
+        criteria: "Acceptance: 输出必须为 1200x360，不能出现 1px 尺寸偏差。",
+        state: "P0 / failed",
+        headline: "Mega Day",
+        note: "Candidate output is 1198x360; mark failed unless rerun fixes it."
+      },
+      {
+        title: "Regression - subject lost",
+        criteria: "Acceptance: 商品主体和价格利益点都必须可见。",
+        state: "regression",
+        headline: "Flash Picks",
+        note: "Candidate preserves price but subject is visually weaker."
+      }
+    ];
+
+    const workflowSteps = [
+      {
+        title: "Bind Dataset Version",
+        desc: "选择已冻结的数据集版本，固定评测输入。",
+        evidence: "Dataset RG-v3 locked for baseline and candidate."
+      },
+      {
+        title: "Create Experiment",
+        desc: "创建 release eval，绑定 skill、baseline 和 candidate。",
+        evidence: "Experiment record created with candidate 2026.05-r7."
+      },
+      {
+        title: "Run Baseline / Candidate",
+        desc: "同一批 cases 分别运行 baseline 与 candidate。",
+        evidence: "84 variant runs completed; attempt_no tracked."
+      },
+      {
+        title: "Generate Comparisons",
+        desc: "按 case 生成 baseline/candidate comparison。",
+        evidence: "42 comparisons generated and assigned to review queue."
+      },
+      {
+        title: "Submit Structured Review",
+        desc: "Reviewer 提交决策、rubric 和必要说明。",
+        evidence: "All required reviews submitted; no not_sure remaining."
+      },
+      {
+        title: "Gate Passed / Notify",
+        desc: "Gate 计算通过，生成报告并发送 Seatalk 预览。",
+        evidence: "Gate status passed; report and CSV are ready."
+      }
+    ];
+
+    let activeCase = 0;
+    let queueRemaining = queueCases.length;
+    let workflowStep = 0;
+    let workflowDone = false;
+    let workflowErrorStep = null;
+    let workflowTimers = [];
+
+    const toast = document.getElementById("toast");
+    const experimentRows = document.getElementById("experimentRows");
+    const caseList = document.getElementById("caseList");
+    const workflowLog = document.getElementById("workflowLog");
+    const workflowBadge = document.getElementById("workflowBadge");
+
+    const workflowInputIds = {
+      dataset: "demoDataset",
+      experiment: "demoExperiment",
+      candidate: "demoCandidate",
+      comment: "demoComment"
     };
-
-    const $ = (selector) => document.querySelector(selector);
-    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-    const toast = $("#toast");
-
-    function nowLabel() {
-      return new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
-    }
-
-    function uid(prefix) {
-      return prefix + "-" + Math.random().toString(16).slice(2, 8);
-    }
 
     function showToast(message) {
       toast.textContent = message;
@@ -1251,696 +1754,312 @@
       window.setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    function audit(text) {
-      appState.auditLogs.unshift({ time: nowLabel(), text });
-      renderAll();
+    function workflowStatus(index) {
+      if (workflowErrorStep === index) return "error";
+      if (workflowDone || index < workflowStep) return "success";
+      if (index === workflowStep) return "processing";
+      return "default";
     }
 
-    function selectedDataset() {
-      return appState.datasets.find((item) => item.id === appState.selectedDatasetId) || null;
+    function workflowStatusText(index) {
+      const status = workflowStatus(index);
+      if (status === "success") return "done";
+      if (status === "error") return "input error";
+      if (status === "processing") return "current";
+      return "waiting";
     }
 
-    function selectedDatasetVersion() {
-      return appState.datasetVersions.find((item) => item.id === appState.selectedDatasetVersionId) || null;
+    function renderWorkflow() {
+      const container = document.getElementById("workflowSteps");
+      container.innerHTML = workflowSteps.map((step, index) => {
+        const status = workflowStatus(index);
+        return `
+          <div class="workflow-step is-${status}">
+            <span class="workflow-index">${String(index + 1).padStart(2, "0")}</span>
+            <span class="workflow-copy">
+              <strong>${step.title}</strong>
+              <span>${step.desc}</span>
+            </span>
+            <span class="workflow-state">${workflowStatusText(index)}</span>
+          </div>
+        `;
+      }).join("");
+
+      const current = workflowSteps[Math.min(workflowStep, workflowSteps.length - 1)];
+      document.getElementById("workflowTitle").textContent = current.title;
+      document.getElementById("workflowDesc").textContent = current.desc;
+
+      workflowBadge.className = "pill";
+      if (workflowErrorStep !== null) {
+        workflowBadge.classList.add("block");
+        workflowBadge.textContent = "input error";
+      } else if (workflowDone) {
+        workflowBadge.classList.add("pass");
+        workflowBadge.textContent = "gate passed";
+      } else {
+        workflowBadge.classList.add("warn");
+        workflowBadge.textContent = "step " + String(workflowStep + 1) + " / " + String(workflowSteps.length);
+      }
     }
 
-    function selectedExperiment() {
-      return appState.experiments.find((item) => item.id === appState.selectedExperimentId) || null;
-    }
-
-    function experimentRuns() {
-      const experiment = selectedExperiment();
-      return experiment ? appState.runs.filter((run) => run.experimentId === experiment.id) : [];
-    }
-
-    function experimentComparisons() {
-      const experiment = selectedExperiment();
-      return experiment ? appState.comparisons.filter((item) => item.experimentId === experiment.id) : [];
-    }
-
-    function caseById(id) {
-      return appState.cases.find((item) => item.id === id);
-    }
-
-    function versionLabel(versionId) {
-      const version = appState.datasetVersions.find((item) => item.id === versionId);
-      if (!version) return "-";
-      const dataset = appState.datasets.find((item) => item.id === version.datasetId);
-      return `${dataset ? dataset.name : "Dataset"} / ${version.version}`;
-    }
-
-    function pillClass(status) {
-      if (["passed", "frozen", "completed", "succeeded", "reviewed"].includes(status)) return "pass";
-      if (["failed", "blocked", "cancelled"].includes(status)) return "block";
-      if (["running", "reviewing", "queued"].includes(status)) return "process";
-      if (["draft", "pending", "not_evaluated", "not_generated"].includes(status)) return "";
-      return "warn";
+    function addWorkflowLog(message, tone = "default") {
+      const line = document.createElement("div");
+      line.className = "log-line";
+      line.innerHTML = `<time>${tone}</time><span>${message}</span>`;
+      workflowLog.prepend(line);
     }
 
     function setFieldError(field, message) {
+      const id = workflowInputIds[field];
       const wrapper = document.querySelector(`[data-field="${field}"]`);
-      const target = document.getElementById(field + "Error");
-      if (!wrapper || !target) return;
+      const error = document.getElementById(id + "Error");
       wrapper.classList.toggle("has-error", Boolean(message));
-      target.textContent = message || "";
+      error.textContent = message || "";
     }
 
-    function clearErrors(fields) {
-      fields.forEach((field) => setFieldError(field, ""));
+    function clearWorkflowErrors() {
+      Object.keys(workflowInputIds).forEach((field) => setFieldError(field, ""));
+      workflowErrorStep = null;
     }
 
-    function navigate(sectionId) {
-      $$(".section").forEach((item) => item.classList.toggle("active", item.id === sectionId));
-      $$(".nav button").forEach((item) => item.classList.toggle("active", item.dataset.section === sectionId));
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    function setHappyPathInputs() {
+      document.getElementById("demoDataset").value = "RG-v3";
+      document.getElementById("demoExperiment").value = "Release Eval / MY image relayout";
+      document.getElementById("demoCandidate").value = "2026.05-r7";
+      document.getElementById("demoComment").value = "All required comparisons passed. No P0 failed, no not_sure left.";
     }
 
-    function nextState() {
-      const frozenVersion = selectedDatasetVersion();
-      const experiment = selectedExperiment();
-      const comparisons = experimentComparisons();
-      const pendingReviews = comparisons.filter((item) => !item.latestReviewId).length;
-      const report = experiment ? appState.reports.find((item) => item.experimentId === experiment.id) : null;
+    function validateWorkflowStep() {
+      clearWorkflowErrors();
 
-      if (!frozenVersion) return { label: "新建 Dataset", section: "datasets" };
-      if (!experiment) return { label: "创建 Experiment", section: "experiments" };
-      if (experiment.status === "draft") return { label: "运行 latest", section: "runs", action: startRuns };
-      if (experiment.status === "running" || experiment.status === "queued") return { label: "查看 Runs", section: "runs" };
-      if (experiment.status === "reviewing" && pendingReviews > 0) return { label: "继续 Review", section: "review" };
-      if (experiment.status === "reviewing" && pendingReviews === 0) return { label: "生成 Report", section: "report", action: generateReport };
-      if (!report) return { label: "生成 Report", section: "report", action: generateReport };
-      return { label: "发送 Seatalk 预览", section: "report", action: sendSeatalk };
-    }
+      if (workflowStep === 0) {
+        const dataset = document.getElementById("demoDataset").value.trim();
+        const experiment = document.getElementById("demoExperiment").value.trim();
+        const candidate = document.getElementById("demoCandidate").value.trim();
+        let valid = true;
 
-    function renderNavAndTopbar() {
-      const experiment = selectedExperiment();
-      const version = selectedDatasetVersion();
-      const runs = experimentRuns();
-      const comparisons = experimentComparisons();
-      const reviewed = comparisons.filter((item) => item.latestReviewId).length;
-      const report = experiment ? appState.reports.find((item) => item.experimentId === experiment.id) : null;
-      const next = nextState();
+        if (!dataset) {
+          setFieldError("dataset", "Dataset Version 必填。");
+          valid = false;
+        } else if (!/^RG-v\d+$/i.test(dataset)) {
+          setFieldError("dataset", "格式应为 RG-v3 这类已冻结版本。");
+          valid = false;
+        }
 
-      $("#crumb").textContent = experiment
-        ? `Skill Evaluation MVP / ${versionLabel(experiment.datasetVersionId)} / Candidate ${experiment.candidate}`
-        : "Skill Evaluation MVP / No active experiment";
-      $("#nextAction").textContent = next.label;
-      $("#exportCsv").disabled = !report;
-      $("#sendSeatalk").disabled = !report;
-      $("#navDataset").textContent = version ? version.version : "draft";
-      $("#navExperiment").textContent = experiment ? experiment.status : "new";
-      $("#navRuns").textContent = String(runs.length);
-      $("#navReview").textContent = `${reviewed}/${comparisons.length}`;
-      $("#navGate").textContent = experiment ? experiment.gateStatus : "Gate";
-      $("#navReport").textContent = report ? "ready" : "CSV";
-      $("#railHint").textContent = next.label + " 是当前建议下一步。";
-    }
+        if (!experiment) {
+          setFieldError("experiment", "Experiment Name 必填。");
+          valid = false;
+        } else if (experiment.length < 6) {
+          setFieldError("experiment", "名称太短，无法用于报告追踪。");
+          valid = false;
+        }
 
-    function renderOverview() {
-      const experiment = selectedExperiment();
-      const version = selectedDatasetVersion();
-      const comparisons = experimentComparisons();
-      const reviewed = comparisons.filter((item) => item.latestReviewId).length;
-      const runs = experimentRuns();
-      const report = experiment ? appState.reports.find((item) => item.experimentId === experiment.id) : null;
+        if (!candidate) {
+          setFieldError("candidate", "Candidate Version 必填。");
+          valid = false;
+        } else if (!/^2026\.\d{2}-r\d+$/i.test(candidate)) {
+          setFieldError("candidate", "格式应为 2026.05-r7。");
+          valid = false;
+        }
 
-      $("#metricDataset").textContent = version ? version.version : "-";
-      $("#metricDatasetSub").textContent = version ? `${version.caseIds.length} cases / frozen snapshot` : "Create and freeze dataset first";
-      $("#metricExperiment").textContent = experiment ? experiment.name : "-";
-      $("#metricExperimentSub").textContent = experiment ? `${experiment.status} / ${experiment.candidate}` : "Create a release eval";
-      $("#metricRuns").textContent = String(runs.length);
-      $("#metricRunsSub").textContent = runs.length ? `${runs.filter((item) => item.status === "succeeded").length} succeeded` : "Start baseline + candidate runs";
-      $("#metricReview").textContent = `${reviewed}/${comparisons.length}`;
-      $("#metricReviewSub").textContent = comparisons.length ? "required comparisons" : "Generate comparisons after runs";
-      $("#overviewStatus").textContent = experiment ? experiment.status : "no_experiment";
-      $("#overviewStatus").className = `pill ${pillClass(experiment ? experiment.status : "not_evaluated")}`;
-      $("#gateBadge").textContent = experiment ? experiment.gateStatus : "not_evaluated";
-      $("#gateBadge").className = `pill ${pillClass(experiment ? experiment.gateStatus : "not_evaluated")}`;
-
-      if (report) {
-        $("#gateScore").textContent = `${report.passRate}%`;
-        $("#gateNarrative").textContent = report.reason;
-      } else {
-        $("#gateScore").textContent = "-";
-        $("#gateNarrative").textContent = "完成 review 后生成 gate 结果。";
+        if (!valid) {
+          workflowErrorStep = 0;
+          addWorkflowLog("Input validation failed before creating experiment.", "error");
+          renderWorkflow();
+        }
+        return valid;
       }
 
-      const steps = [
-        { label: "Frozen Dataset", done: Boolean(version), active: !version },
-        { label: "Experiment Draft", done: Boolean(experiment), active: Boolean(version) && !experiment },
-        { label: "Runs Completed", done: runs.length > 0 && runs.every((item) => item.status === "succeeded"), active: experiment && experiment.status === "draft" },
-        { label: "Reviews Completed", done: comparisons.length > 0 && reviewed === comparisons.length, active: experiment && experiment.status === "reviewing" },
-        { label: "Report Ready", done: Boolean(report), active: comparisons.length > 0 && reviewed === comparisons.length && !report }
-      ];
-      $("#flowSteps").innerHTML = steps.map((step, index) => `
-        <div class="step-row ${step.done ? "done" : step.active ? "active" : ""}">
-          <span class="step-dot">${index + 1}</span>
-          <span><strong>${step.label}</strong><span>${step.done ? "Done" : step.active ? "Current action" : "Waiting for previous step"}</span></span>
-          <span class="pill ${step.done ? "pass" : step.active ? "process" : ""}">${step.done ? "done" : step.active ? "next" : "waiting"}</span>
-        </div>
-      `).join("");
-
-      $("#overviewAudit").innerHTML = appState.auditLogs.slice(0, 5).map((log) => `<div class="log-line"><time>${log.time}</time><span>${log.text}</span></div>`).join("");
-    }
-
-    function renderDatasets() {
-      const dataset = selectedDataset();
-      const versions = appState.datasetVersions.filter((version) => version.datasetId === (dataset && dataset.id));
-      $("#datasetSelectedPill").textContent = dataset ? dataset.status : "none";
-      $("#datasetSelectedPill").className = `pill ${pillClass(dataset ? dataset.status : "draft")}`;
-
-      if (dataset) {
-        $("#datasetName").value = dataset.name;
-        $("#datasetOwner").value = dataset.owner;
-        $("#datasetDescription").value = dataset.description;
+      if (workflowStep === 4) {
+        const comment = document.getElementById("demoComment").value.trim();
+        if (!comment) {
+          setFieldError("comment", "Review Comment 必填，用于 gate evidence。");
+          workflowErrorStep = 4;
+          addWorkflowLog("Review submit blocked because comment is empty.", "error");
+          renderWorkflow();
+          return false;
+        }
       }
 
-      $("#datasetRows").innerHTML = appState.datasets.map((item) => {
-        const itemVersions = appState.datasetVersions.filter((version) => version.datasetId === item.id);
-        return `
-          <tr>
-            <td><b>${item.name}</b><br><span style="color:var(--muted)">${item.description}</span></td>
-            <td><span class="pill ${pillClass(item.status)}">${item.status}</span></td>
-            <td>${itemVersions.map((version) => version.version).join(", ") || "-"}</td>
-            <td>${item.draftCaseIds.length}</td>
-            <td>${item.owner}</td>
-            <td class="row-actions">
-              <button class="mini primary" data-edit-dataset="${item.id}">Edit</button>
-              <button class="mini" data-select-version="${itemVersions[0] ? itemVersions[0].id : ""}" ${itemVersions[0] ? "" : "disabled"}>Use Version</button>
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      const activeCaseIds = dataset ? dataset.draftCaseIds : [];
-      $("#caseLibrary").innerHTML = appState.cases.map((item) => {
-        const added = activeCaseIds.includes(item.id);
-        const canEdit = dataset && dataset.status === "draft";
-        return `
-          <div class="case-item">
-            <strong>${item.name}</strong>
-            <span style="color:var(--muted);font-size:13px;">${item.criteria}</span>
-            <span class="case-meta">
-              <span class="pill ${item.priority === "P0" ? "block" : "warn"}">${item.priority}</span>
-              <span class="pill">${item.suite}</span>
-              ${item.tags.map((tag) => `<span class="pill">${tag}</span>`).join("")}
-            </span>
-            <button class="mini ${added ? "danger" : "primary"}" data-toggle-case="${item.id}" ${canEdit ? "" : "disabled"}>${added ? "Remove" : "Add"}</button>
-          </div>
-        `;
-      }).join("");
-
-      $("#deleteDataset").disabled = !dataset || dataset.status !== "draft";
-      $("#freezeDataset").disabled = !dataset || dataset.status !== "draft";
-      $("#datasetChangelog").disabled = !dataset || dataset.status !== "draft";
+      return true;
     }
 
-    function renderExperiments() {
-      const experiment = selectedExperiment();
-      const frozenVersions = appState.datasetVersions.filter((item) => item.status === "frozen");
-      $("#experimentDataset").innerHTML = frozenVersions.map((version) => `<option value="${version.id}">${versionLabel(version.id)}</option>`).join("");
-
-      if (experiment) {
-        $("#experimentName").value = experiment.name;
-        $("#experimentSkill").value = experiment.skill;
-        $("#candidateVersion").value = experiment.candidate;
-        $("#baselineVersion").value = experiment.baseline;
-        $("#experimentDataset").value = experiment.datasetVersionId;
-        $("#experimentOwner").value = experiment.owner;
-      }
-
-      $("#experimentSelectedPill").textContent = experiment ? experiment.status : "none";
-      $("#experimentSelectedPill").className = `pill ${pillClass(experiment ? experiment.status : "draft")}`;
-      $("#experimentRows").innerHTML = appState.experiments.map((item) => `
-        <tr>
-          <td><b>${item.name}</b><br><span style="color:var(--muted)">${item.skill} / ${item.candidate}</span></td>
-          <td>${versionLabel(item.datasetVersionId)}</td>
-          <td><span class="pill ${pillClass(item.status)}">${item.status}</span></td>
-          <td><span class="pill ${pillClass(item.gateStatus)}">${item.gateStatus}</span></td>
-          <td class="row-actions">
-            <button class="mini primary" data-edit-experiment="${item.id}">Edit</button>
-            <button class="mini" data-use-experiment="${item.id}">Use</button>
-          </td>
-        </tr>
-      `).join("");
-
-      const draft = experiment && experiment.status === "draft";
-      $("#saveExperiment").disabled = !draft && Boolean(experiment);
-      $("#deleteExperiment").disabled = !draft;
-      $("#runExperiment").disabled = !experiment || !["draft", "cancelled"].includes(experiment.status);
-      $("#duplicateExperiment").disabled = !experiment;
-    }
-
-    function renderRuns() {
-      const experiment = selectedExperiment();
-      const runs = experimentRuns();
-      const comparisons = experimentComparisons();
-      $("#runCount").textContent = String(runs.length);
-      $("#comparisonCount").textContent = String(comparisons.length);
-      $("#runStatusMetric").textContent = experiment ? experiment.status : "-";
-      $("#runSummaryPill").textContent = experiment ? experiment.status : "no_experiment";
-      $("#runSummaryPill").className = `pill ${pillClass(experiment ? experiment.status : "not_evaluated")}`;
-      $("#startRuns").disabled = !experiment || !["draft", "cancelled"].includes(experiment.status);
-      $("#cancelExperiment").disabled = !experiment || !["queued", "running"].includes(experiment.status);
-      $("#rerunFailed").disabled = !runs.some((run) => run.status === "failed");
-
-      $("#runRows").innerHTML = runs.length ? runs.map((run) => `
-        <tr>
-          <td>${caseById(run.caseId).name}</td>
-          <td>${run.variant}</td>
-          <td>${run.attemptNo}</td>
-          <td><span class="pill ${pillClass(run.status)}">${run.status}</span></td>
-          <td>${run.durationMs ? run.durationMs + "ms" : "-"}</td>
-          <td class="row-actions"><button class="mini primary" data-rerun="${run.id}">Rerun</button></td>
-        </tr>
-      `).join("") : `<tr><td colspan="6"><div class="empty">还没有 runs。先创建 Experiment，再运行 latest。</div></td></tr>`;
-
-      $("#comparisonRows").innerHTML = comparisons.length ? comparisons.map((item) => {
-        const review = appState.reviews.find((reviewItem) => reviewItem.id === item.latestReviewId);
-        return `
-          <tr>
-            <td>${caseById(item.caseId).name}</td>
-            <td>${item.suite}</td>
-            <td><span class="pill ${pillClass(item.reviewStatus)}">${item.reviewStatus}</span></td>
-            <td>${review ? review.decision : "-"}</td>
-          </tr>
-        `;
-      }).join("") : `<tr><td colspan="4"><div class="empty">Runs 完成后会生成 comparisons。</div></td></tr>`;
-    }
-
-    function renderReview() {
-      const comparisons = experimentComparisons();
-      const reviewed = comparisons.filter((item) => item.latestReviewId).length;
-      $("#reviewPill").textContent = `${reviewed}/${comparisons.length}`;
-      $("#reviewPill").className = `pill ${reviewed === comparisons.length && comparisons.length ? "pass" : "process"}`;
-
-      if (!appState.selectedComparisonId && comparisons[0]) {
-        appState.selectedComparisonId = comparisons[0].id;
-      }
-      const selected = comparisons.find((item) => item.id === appState.selectedComparisonId);
-
-      $("#reviewList").innerHTML = comparisons.length ? comparisons.map((item) => {
-        const caseItem = caseById(item.caseId);
-        const review = appState.reviews.find((reviewItem) => reviewItem.id === item.latestReviewId);
-        return `
-          <div class="case-item" style="${item.id === appState.selectedComparisonId ? "border-color:var(--acid);background:#edf5ff;" : ""}">
-            <strong>${caseItem.name}</strong>
-            <span style="color:var(--muted);font-size:13px;">${caseItem.criteria}</span>
-            <span class="case-meta">
-              <span class="pill ${review ? "pass" : "process"}">${review ? review.decision : item.reviewStatus}</span>
-              <span class="pill">${caseItem.suite}</span>
-            </span>
-            <button class="mini primary" data-select-comparison="${item.id}">Review</button>
-          </div>
-        `;
-      }).join("") : `<div class="empty">还没有 comparison。请先运行 Experiment。</div>`;
-
-      if (!selected) {
-        $("#reviewTitle").textContent = "No comparison selected";
-        $("#reviewCriteria").textContent = "Run an experiment first.";
-        $("#reviewState").textContent = "pending";
+    function advanceWorkflow(isAuto = false) {
+      if (workflowDone) return;
+      if (!validateWorkflowStep()) {
+        showToast("输入有误，已停在当前步骤。");
         return;
       }
 
-      const caseItem = caseById(selected.caseId);
-      const review = appState.reviews.find((item) => item.id === selected.latestReviewId);
-      $("#reviewTitle").textContent = caseItem.name;
-      $("#reviewCriteria").textContent = "Acceptance: " + caseItem.criteria;
-      $("#reviewState").textContent = selected.reviewStatus;
-      $("#reviewState").className = `pill ${pillClass(selected.reviewStatus)}`;
-      $("#candidateHeadline").textContent = caseItem.name.replace(/ - .*/, "");
-      $("#candidateNote").textContent = caseItem.criteria;
-      $("#reviewDecision").value = review ? review.decision : "";
-      $("#reviewIssue").value = review ? review.issueType : "";
-      $("#reviewSeverity").value = review ? review.severity : "";
-      $("#skipReason").value = review ? review.skipReason : "";
-      $("#reviewComment").value = review ? review.comment : "";
-    }
+      addWorkflowLog(workflowSteps[workflowStep].evidence, "ok");
 
-    function calculateReport() {
-      const experiment = selectedExperiment();
-      const comparisons = experimentComparisons();
-      const reviews = comparisons.map((item) => appState.reviews.find((review) => review.id === item.latestReviewId)).filter(Boolean);
-      const passed = reviews.filter((item) => item.decision === "passed").length;
-      const failed = reviews.filter((item) => item.decision === "failed").length;
-      const notSure = reviews.filter((item) => item.decision === "not_sure").length;
-      const skipped = reviews.filter((item) => item.decision === "skipped").length;
-      const counted = passed + failed;
-      const passRate = counted ? Math.round((passed / counted) * 100) : 0;
-      const p0Failed = comparisons.filter((comparison) => {
-        const caseItem = caseById(comparison.caseId);
-        const review = appState.reviews.find((item) => item.id === comparison.latestReviewId);
-        return caseItem.priority === "P0" && review && review.decision === "failed";
-      }).length;
-      const skipRate = comparisons.length ? Math.round((skipped / comparisons.length) * 100) : 0;
-
-      let gate = "passed";
-      let reason = "所有强门禁满足，评审已完成。";
-      if (p0Failed > 0) {
-        gate = "blocked";
-        reason = "存在 P0 failed，Gate 不能放行。";
-      } else if (notSure > 0) {
-        gate = "blocked";
-        reason = "存在 Not Sure，需要 Owner 裁决。";
-      } else if (skipRate > 5) {
-        gate = "blocked";
-        reason = "Skip rate 超过 5%。";
-      } else if (passRate < 90) {
-        gate = "failed";
-        reason = "General pass rate 低于 90%。";
+      if (workflowStep >= workflowSteps.length - 1) {
+        workflowDone = true;
+        renderWorkflow();
+        showToast("Happy path completed. Gate status passed.");
+        return;
       }
 
-      return {
-        id: "report-" + experiment.id,
-        experimentId: experiment.id,
-        gate,
-        passRate,
-        p0Failed,
-        notSure,
-        skipped,
-        failed,
-        reason,
-        note: $("#exceptionNote").value.trim(),
-        status: "draft"
-      };
+      workflowStep += 1;
+      renderWorkflow();
+      if (!isAuto) showToast("Workflow advanced to " + workflowSteps[workflowStep].title + ".");
     }
 
-    function renderReport() {
-      const experiment = selectedExperiment();
-      const report = experiment ? appState.reports.find((item) => item.experimentId === experiment.id) : null;
-      $("#reportStatus").textContent = report ? "generated" : "not_generated";
-      $("#reportStatus").className = `pill ${report ? pillClass(report.gate) : ""}`;
-      $("#reportGate").textContent = report ? report.gate : "-";
-      $("#reportGateReason").textContent = report ? report.reason : "Generate report after review.";
-      $("#reportPassRate").textContent = report ? `${report.passRate}%` : "-";
-      $("#reportRisk").textContent = report ? String(report.p0Failed + report.notSure + report.skipped) : "-";
-      $("#deleteDraftReport").disabled = !report || report.status !== "draft";
-
-      const rows = report ? [
-        ["P0 failed", report.p0Failed, "P0 suite latest reviews", report.p0Failed ? "Fix candidate or mark exception" : "None"],
-        ["Not Sure", report.notSure, "Review decisions", report.notSure ? "Owner adjudication" : "None"],
-        ["Skipped", report.skipped, "Skipped comparisons", report.skipped ? "Check skip rate" : "None"],
-        ["Failed", report.failed, "Failed comparisons", report.failed ? "Review issue types" : "None"]
-      ] : [];
-      $("#riskRows").innerHTML = rows.length ? rows.map((row) => `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td></tr>`).join("") : `<tr><td colspan="4"><div class="empty">Report 尚未生成。</div></td></tr>`;
-      $("#auditLog").innerHTML = appState.auditLogs.map((log) => `<div class="log-line"><time>${log.time}</time><span>${log.text}</span></div>`).join("");
-    }
-
-    function renderAll() {
-      renderNavAndTopbar();
-      renderOverview();
-      renderDatasets();
-      renderExperiments();
-      renderRuns();
-      renderReview();
-      renderReport();
-    }
-
-    function newDataset() {
-      const id = uid("dataset");
-      appState.datasets.unshift({ id, name: "New Release Dataset", description: "Draft dataset for release gate.", owner: "Xinyi", status: "draft", draftCaseIds: [] });
-      appState.selectedDatasetId = id;
-      clearErrors(["datasetName", "datasetOwner", "datasetChangelog"]);
-      audit("Created dataset draft.");
-      showToast("Dataset draft created.");
-    }
-
-    function saveDataset() {
-      const dataset = selectedDataset();
-      if (!dataset || dataset.status !== "draft") return showToast("只能编辑 draft dataset。");
-      clearErrors(["datasetName", "datasetOwner"]);
-      const name = $("#datasetName").value.trim();
-      const owner = $("#datasetOwner").value.trim();
-      let ok = true;
-      if (!name) { setFieldError("datasetName", "Dataset 名称必填。"); ok = false; }
-      if (appState.datasets.some((item) => item.id !== dataset.id && item.name === name)) { setFieldError("datasetName", "已存在同名 Dataset。"); ok = false; }
-      if (!owner) { setFieldError("datasetOwner", "Owner 必填。"); ok = false; }
-      if (!ok) return showToast("Dataset 输入有误。");
-      dataset.name = name;
-      dataset.owner = owner;
-      dataset.description = $("#datasetDescription").value.trim();
-      audit(`Updated dataset draft ${dataset.name}.`);
-      showToast("Dataset draft saved.");
-    }
-
-    function freezeDataset() {
-      const dataset = selectedDataset();
-      clearErrors(["datasetChangelog"]);
-      if (!dataset || dataset.status !== "draft") return showToast("只能冻结 draft dataset。");
-      if (!dataset.draftCaseIds.length) {
-        setFieldError("datasetChangelog", "至少添加 1 个 case。");
-        return showToast("Dataset 还没有 case。");
+    function resetWorkflow(keepLog = false) {
+      workflowTimers.forEach((timer) => window.clearTimeout(timer));
+      workflowTimers = [];
+      workflowStep = 0;
+      workflowDone = false;
+      clearWorkflowErrors();
+      setHappyPathInputs();
+      if (!keepLog) {
+        workflowLog.innerHTML = `<div class="log-line"><time>ready</time><span>Demo initialized with valid release eval inputs.</span></div>`;
       }
-      const changelog = $("#datasetChangelog").value.trim();
-      if (!changelog) {
-        setFieldError("datasetChangelog", "冻结版本必须填写 changelog。");
-        return showToast("Changelog 必填。");
-      }
-      dataset.status = "frozen";
-      const version = {
-        id: uid("dv"),
-        datasetId: dataset.id,
-        version: `RG-v${appState.datasetVersions.length + 3}`,
-        status: "frozen",
-        caseIds: [...dataset.draftCaseIds],
-        changelog
-      };
-      appState.datasetVersions.unshift(version);
-      appState.selectedDatasetVersionId = version.id;
-      audit(`Frozen dataset version ${version.version}.`);
-      showToast("Dataset Version frozen.");
+      renderWorkflow();
     }
 
-    function deleteDataset() {
-      const dataset = selectedDataset();
-      if (!dataset || dataset.status !== "draft") return showToast("已冻结版本不可删除。");
-      appState.datasets = appState.datasets.filter((item) => item.id !== dataset.id);
-      appState.selectedDatasetId = appState.datasets[0] ? appState.datasets[0].id : null;
-      audit(`Deleted draft dataset ${dataset.name}.`);
-      showToast("Draft dataset deleted.");
-    }
-
-    function newExperiment() {
-      const version = selectedDatasetVersion();
-      const id = uid("exp");
-      appState.experiments.unshift({
-        id,
-        name: "New Release Eval",
-        skill: "image_relayout",
-        candidate: "2026.05-r8",
-        baseline: "live",
-        datasetVersionId: version ? version.id : "",
-        owner: "Xinyi",
-        status: "draft",
-        gateStatus: "not_evaluated"
+    function playWorkflow() {
+      resetWorkflow(false);
+      addWorkflowLog("Happy path playback started.", "demo");
+      workflowSteps.forEach((_, index) => {
+        const timer = window.setTimeout(() => advanceWorkflow(true), 760 * (index + 1));
+        workflowTimers.push(timer);
       });
-      appState.selectedExperimentId = id;
-      audit("Created experiment draft.");
-      showToast("Experiment draft created.");
     }
 
-    function validateExperiment() {
-      clearErrors(["experimentName", "experimentSkill", "candidateVersion", "experimentDataset", "experimentOwner"]);
-      let ok = true;
-      if (!$("#experimentName").value.trim()) { setFieldError("experimentName", "Experiment 名称必填。"); ok = false; }
-      if (!$("#experimentSkill").value.trim()) { setFieldError("experimentSkill", "Skill 必填。"); ok = false; }
-      const candidate = $("#candidateVersion").value.trim();
-      if (!candidate) { setFieldError("candidateVersion", "Candidate Version 必填。"); ok = false; }
-      else if (!/^2026\.\d{2}-r\d+$/i.test(candidate)) { setFieldError("candidateVersion", "格式应为 2026.05-r7。"); ok = false; }
-      if (!$("#experimentDataset").value) { setFieldError("experimentDataset", "必须选择 frozen Dataset Version。"); ok = false; }
-      if (!$("#experimentOwner").value.trim()) { setFieldError("experimentOwner", "Owner 必填。"); ok = false; }
-      return ok;
-    }
-
-    function saveExperiment() {
-      const experiment = selectedExperiment();
-      if (!experiment || experiment.status !== "draft") return showToast("只有 draft experiment 可以编辑。");
-      if (!validateExperiment()) return showToast("Experiment 输入有误。");
-      experiment.name = $("#experimentName").value.trim();
-      experiment.skill = $("#experimentSkill").value.trim();
-      experiment.candidate = $("#candidateVersion").value.trim();
-      experiment.baseline = $("#baselineVersion").value.trim() || "live";
-      experiment.datasetVersionId = $("#experimentDataset").value;
-      experiment.owner = $("#experimentOwner").value.trim();
-      appState.selectedDatasetVersionId = experiment.datasetVersionId;
-      audit(`Saved experiment draft ${experiment.name}.`);
-      showToast("Experiment saved.");
-    }
-
-    function duplicateExperiment() {
-      const experiment = selectedExperiment();
-      if (!experiment) return;
-      const copy = { ...experiment, id: uid("exp"), name: experiment.name + " Copy", status: "draft", gateStatus: "not_evaluated" };
-      appState.experiments.unshift(copy);
-      appState.selectedExperimentId = copy.id;
-      audit(`Duplicated experiment ${experiment.name}.`);
-      showToast("Experiment duplicated.");
-    }
-
-    function deleteExperiment() {
-      const experiment = selectedExperiment();
-      if (!experiment || experiment.status !== "draft") return showToast("只能删除 draft experiment。");
-      appState.experiments = appState.experiments.filter((item) => item.id !== experiment.id);
-      appState.selectedExperimentId = appState.experiments[0] ? appState.experiments[0].id : null;
-      audit(`Deleted draft experiment ${experiment.name}.`);
-      showToast("Draft experiment deleted.");
-    }
-
-    function startRuns() {
-      const experiment = selectedExperiment();
-      if (!experiment) return showToast("请先创建 Experiment。");
-      if (!validateExperiment()) return showToast("运行前请先修正 Experiment 输入。");
-      saveExperiment();
-      const version = appState.datasetVersions.find((item) => item.id === experiment.datasetVersionId);
-      if (!version) return showToast("请先绑定 Dataset Version。");
-      appState.runs = appState.runs.filter((item) => item.experimentId !== experiment.id);
-      appState.comparisons = appState.comparisons.filter((item) => item.experimentId !== experiment.id);
-      appState.reviews = appState.reviews.filter((item) => item.experimentId !== experiment.id);
-      version.caseIds.forEach((caseId) => {
-        ["baseline", "candidate"].forEach((variant) => {
-          appState.runs.push({ id: uid("run"), experimentId: experiment.id, caseId, variant, attemptNo: 1, status: "running", durationMs: null });
-        });
-      });
-      experiment.status = "running";
-      experiment.gateStatus = "not_evaluated";
-      audit(`Started ${appState.runs.filter((item) => item.experimentId === experiment.id).length} baseline/candidate runs.`);
-      showToast("Runs started.");
-      renderAll();
-      window.setTimeout(() => completeRuns(experiment.id), 900);
-    }
-
-    function completeRuns(experimentId) {
-      const experiment = appState.experiments.find((item) => item.id === experimentId);
-      if (!experiment || experiment.status !== "running") return;
-      appState.runs.filter((item) => item.experimentId === experimentId).forEach((run, index) => {
-        run.status = "succeeded";
-        run.durationMs = 640 + index * 18;
-      });
-      const version = appState.datasetVersions.find((item) => item.id === experiment.datasetVersionId);
-      version.caseIds.forEach((caseId) => {
-        appState.comparisons.push({ id: uid("cmp"), experimentId, caseId, suite: caseById(caseId).suite, reviewStatus: "assigned", latestReviewId: null });
-      });
-      experiment.status = "reviewing";
-      appState.selectedComparisonId = appState.comparisons.find((item) => item.experimentId === experimentId)?.id || null;
-      audit("Runs completed and comparisons generated.");
-      showToast("Runs completed. Review Queue is ready.");
-      renderAll();
-    }
-
-    function rerunRun(runId) {
-      const run = appState.runs.find((item) => item.id === runId);
-      if (!run) return;
-      const nextAttempt = Math.max(...appState.runs.filter((item) => item.experimentId === run.experimentId && item.caseId === run.caseId && item.variant === run.variant).map((item) => item.attemptNo)) + 1;
-      appState.runs.push({ ...run, id: uid("run"), attemptNo: nextAttempt, status: "succeeded", durationMs: run.durationMs + 42 });
-      audit(`Reran ${run.variant} for ${caseById(run.caseId).name}; attempt ${nextAttempt} created.`);
-      showToast("Rerun created as new attempt.");
-    }
-
-    function cancelExperiment() {
-      const experiment = selectedExperiment();
-      if (!experiment || !["queued", "running"].includes(experiment.status)) return showToast("当前状态不可取消。");
-      experiment.status = "cancelled";
-      appState.runs.filter((item) => item.experimentId === experiment.id && item.status === "running").forEach((run) => run.status = "cancelled");
-      audit(`Cancelled experiment ${experiment.name}.`);
-      showToast("Experiment cancelled.");
-    }
-
-    function submitReview() {
-      const comparison = appState.comparisons.find((item) => item.id === appState.selectedComparisonId);
-      if (!comparison) return showToast("请选择 comparison。");
-      clearErrors(["reviewDecision", "reviewIssue", "reviewSeverity", "skipReason", "reviewComment"]);
-      const decision = $("#reviewDecision").value;
-      const issueType = $("#reviewIssue").value;
-      const severity = $("#reviewSeverity").value;
-      const skipReason = $("#skipReason").value.trim();
-      const comment = $("#reviewComment").value.trim();
-      let ok = true;
-      if (!decision) { setFieldError("reviewDecision", "请选择评审结论。"); ok = false; }
-      if (decision === "failed" && !issueType) { setFieldError("reviewIssue", "Fail 必须选择 issue type。"); ok = false; }
-      if (decision === "failed" && !severity) { setFieldError("reviewSeverity", "Fail 必须选择 severity。"); ok = false; }
-      if ((decision === "failed" || decision === "not_sure") && !comment) { setFieldError("reviewComment", decision === "failed" ? "Fail 必须填写 comment。" : "Not Sure 必须填写判断原因。"); ok = false; }
-      if (decision === "skipped" && !skipReason) { setFieldError("skipReason", "Skip 必须填写 skip reason。"); ok = false; }
-      if (!ok) return showToast("Review 输入有误。");
-
-      const existing = appState.reviews.find((item) => item.id === comparison.latestReviewId);
-      const review = existing || { id: uid("review"), experimentId: comparison.experimentId, comparisonId: comparison.id };
-      review.decision = decision;
-      review.issueType = issueType;
-      review.severity = severity;
-      review.skipReason = skipReason;
-      review.comment = comment;
-      review.reviewer = "Reviewer";
-      review.reviewedAt = nowLabel();
-      if (!existing) appState.reviews.push(review);
-      comparison.latestReviewId = review.id;
-      comparison.reviewStatus = decision === "not_sure" ? "needs_adjudication" : decision === "skipped" ? "skipped" : "reviewed";
-
-      const comparisons = experimentComparisons();
-      if (comparisons.every((item) => item.latestReviewId)) {
-        const experiment = selectedExperiment();
-        experiment.status = "completed";
+    function triggerWorkflowError(type) {
+      resetWorkflow(true);
+      if (type === "missingDataset") {
+        document.getElementById("demoDataset").value = "";
+        workflowStep = 0;
       }
-      audit(`Submitted review ${decision} for ${caseById(comparison.caseId).name}.`);
-      showToast("Review saved.");
-    }
-
-    function selectNextReview() {
-      const comparisons = experimentComparisons();
-      if (!comparisons.length) return;
-      const index = comparisons.findIndex((item) => item.id === appState.selectedComparisonId);
-      appState.selectedComparisonId = comparisons[(index + 1) % comparisons.length].id;
-      renderAll();
-    }
-
-    function generateReport() {
-      const experiment = selectedExperiment();
-      if (!experiment) return showToast("请先创建 Experiment。");
-      const comparisons = experimentComparisons();
-      if (!comparisons.length) return showToast("请先运行 Experiment 生成 comparisons。");
-      const pending = comparisons.filter((item) => !item.latestReviewId);
-      if (pending.length) return showToast(`仍有 ${pending.length} 个 comparison 待评审。`);
-      const report = calculateReport();
-      const index = appState.reports.findIndex((item) => item.experimentId === experiment.id);
-      if (index >= 0) appState.reports[index] = report;
-      else appState.reports.push(report);
-      experiment.gateStatus = report.gate;
-      experiment.status = "completed";
-      audit(`Generated report. Gate status: ${report.gate}.`);
-      showToast("Report generated.");
-    }
-
-    function saveException() {
-      clearErrors(["exceptionNote"]);
-      const note = $("#exceptionNote").value.trim();
-      if (note.length < 10) {
-        setFieldError("exceptionNote", "例外说明至少 10 个字。");
-        return showToast("Exception Note 太短。");
+      if (type === "badCandidate") {
+        document.getElementById("demoCandidate").value = "latest";
+        workflowStep = 0;
       }
-      const experiment = selectedExperiment();
-      const report = experiment && appState.reports.find((item) => item.experimentId === experiment.id);
-      if (report) report.note = note;
-      audit("Updated exception note.");
-      showToast("Exception note saved.");
+      if (type === "blankComment") {
+        document.getElementById("demoComment").value = "";
+        workflowStep = 4;
+      }
+      validateWorkflowStep();
+      showToast("异常输入已触发。");
     }
 
-    function deleteDraftReport() {
-      const experiment = selectedExperiment();
-      const report = experiment && appState.reports.find((item) => item.experimentId === experiment.id);
-      if (!report || report.status !== "draft") return showToast("没有可删除的 draft report。");
-      appState.reports = appState.reports.filter((item) => item.id !== report.id);
-      experiment.gateStatus = "not_evaluated";
-      audit("Deleted draft report.");
-      showToast("Draft report deleted.");
+    function gateClass(gate) {
+      if (gate === "passed") return "pass";
+      if (gate === "blocked" || gate === "failed") return "block";
+      return "warn";
     }
 
-    function exportCsv() {
-      const experiment = selectedExperiment();
-      const report = experiment && appState.reports.find((item) => item.experimentId === experiment.id);
-      if (!report) return showToast("请先生成 Report。");
-      const csv = [
-        "experiment,gate_status,pass_rate,p0_failed,not_sure,skipped",
-        `${experiment.name},${report.gate},${report.passRate}%,${report.p0Failed},${report.notSure},${report.skipped}`
-      ].join("\\n");
+    function renderExperiments(filter = "all") {
+      const visible = experiments.filter((item) => filter === "all" || item.gate === filter || item.status === filter);
+      experimentRows.innerHTML = visible.map((item) => `
+        <tr>
+          <td><b>${item.name}</b></td>
+          <td>${item.skill}</td>
+          <td>${item.versions}</td>
+          <td>${item.dataset}</td>
+          <td><span class="pill warn">${item.status}</span></td>
+          <td><span class="pill ${gateClass(item.gate)}">${item.gate}</span></td>
+          <td>${item.suite}</td>
+          <td>${item.owner}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderCases() {
+      caseList.innerHTML = queueCases.map((item, index) => `
+        <button class="case-item ${index === activeCase ? "active" : ""}" data-case="${index}">
+          <strong>${item.title}</strong>
+          <span>${item.criteria}</span>
+          <span class="case-meta">
+            <span class="pill ${item.state.includes("failed") ? "block" : "warn"}">${item.state}</span>
+            <span class="pill">assigned</span>
+          </span>
+        </button>
+      `).join("");
+      document.getElementById("queueCount").textContent = String(queueRemaining);
+    }
+
+    function loadCase(index) {
+      activeCase = index;
+      const item = queueCases[index];
+      document.getElementById("caseTitle").textContent = item.title;
+      document.getElementById("caseCriteria").textContent = item.criteria;
+      document.getElementById("caseState").textContent = item.state;
+      document.getElementById("candidateHeadline").textContent = item.headline;
+      document.getElementById("candidateNote").textContent = item.note;
+      document.getElementById("reviewComment").value = item.note;
+      renderCases();
+    }
+
+    document.querySelectorAll(".nav button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".nav button").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll(".section").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        document.getElementById(button.dataset.section).classList.add("active");
+      });
+    });
+
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach((item) => item.classList.remove("active"));
+        chip.classList.add("active");
+        renderExperiments(chip.dataset.filter);
+      });
+    });
+
+    document.querySelectorAll(".seg button").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".seg button").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        const decision = button.dataset.decision;
+        const comment = document.getElementById("reviewComment");
+        if (decision === "failed") comment.value = "Fail: issue_type and severity are required before submit.";
+        if (decision === "skipped") comment.value = "Skip reason required: case input unavailable for this release.";
+        if (decision === "not_sure") comment.value = "Not Sure: needs Owner adjudication before gate calculation.";
+        if (decision === "passed") comment.value = "Candidate satisfies acceptance criteria and does not regress from baseline.";
+      });
+    });
+
+    caseList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-case]");
+      if (!button) return;
+      loadCase(Number(button.dataset.case));
+    });
+
+    document.getElementById("submitReview").addEventListener("click", () => {
+      queueRemaining = Math.max(0, queueRemaining - 1);
+      document.getElementById("queueCount").textContent = String(queueRemaining);
+      document.getElementById("reviewMetric").textContent = `${42 - queueRemaining}/42`;
+      showToast("Structured review saved. Comparison latest_review_id updated.");
+    });
+
+    document.getElementById("nextCase").addEventListener("click", () => {
+      loadCase((activeCase + 1) % queueCases.length);
+    });
+
+    document.getElementById("rerunCase").addEventListener("click", () => {
+      const log = document.getElementById("auditLog");
+      const line = document.createElement("div");
+      line.className = "log-line";
+      line.innerHTML = `<time>now</time><span>Candidate run rerun requested. New attempt_no will be created.</span>`;
+      log.prepend(line);
+      showToast("Rerun queued. Old attempt remains available for audit.");
+    });
+
+    document.getElementById("simulateRun").addEventListener("click", () => {
+      document.getElementById("runMetric").textContent = "84";
+      showToast("Latest runs completed. Experiment status moved to reviewing.");
+    });
+
+    document.getElementById("notifyBtn").addEventListener("click", () => {
+      showToast("Seatalk preview: gate_status blocked, report link attached.");
+    });
+
+    document.getElementById("exportCsv").addEventListener("click", () => {
+      const csv = "experiment,gate_status,overall_pass_rate,p0_failed,not_sure\\nRelease Eval / MY image relayout,blocked,92%,1,2\\n";
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -1948,89 +2067,34 @@
       a.download = "evalove-report-1.0.csv";
       a.click();
       URL.revokeObjectURL(url);
-      audit("Exported report CSV.");
-      showToast("CSV exported.");
-    }
+      showToast("CSV exported from Experiment Report.");
+    });
 
-    function sendSeatalk() {
-      const experiment = selectedExperiment();
-      const report = experiment && appState.reports.find((item) => item.experimentId === experiment.id);
-      if (!report) return showToast("请先生成 Report。");
-      report.status = "sent";
-      audit(`Seatalk preview sent with gate ${report.gate}.`);
-      showToast(`Seatalk preview: ${experiment.name} / gate ${report.gate}.`);
-    }
+    document.getElementById("freezeDataset").addEventListener("click", () => {
+      showToast("Dataset Version draft frozen as Release Gate Dataset v4.");
+    });
 
-    function bindEvents() {
-      $$(".nav button").forEach((button) => button.addEventListener("click", () => navigate(button.dataset.section)));
-      $("#nextAction").addEventListener("click", () => {
-        const next = nextState();
-        navigate(next.section);
-        if (next.action) next.action();
+    document.getElementById("playWorkflow").addEventListener("click", playWorkflow);
+    document.getElementById("advanceWorkflow").addEventListener("click", () => advanceWorkflow(false));
+    document.getElementById("resetWorkflow").addEventListener("click", () => {
+      resetWorkflow(false);
+      showToast("Workflow demo reset.");
+    });
+    document.getElementById("demoMissingDataset").addEventListener("click", () => triggerWorkflowError("missingDataset"));
+    document.getElementById("demoBadCandidate").addEventListener("click", () => triggerWorkflowError("badCandidate"));
+    document.getElementById("demoBlankComment").addEventListener("click", () => triggerWorkflowError("blankComment"));
+
+    Object.values(workflowInputIds).forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => {
+        clearWorkflowErrors();
+        renderWorkflow();
       });
-      $("#exportCsv").addEventListener("click", exportCsv);
-      $("#sendSeatalk").addEventListener("click", sendSeatalk);
+    });
 
-      $("#newDataset").addEventListener("click", newDataset);
-      $("#saveDataset").addEventListener("click", saveDataset);
-      $("#freezeDataset").addEventListener("click", freezeDataset);
-      $("#deleteDataset").addEventListener("click", deleteDataset);
-      $("#datasetRows").addEventListener("click", (event) => {
-        const edit = event.target.closest("[data-edit-dataset]");
-        const version = event.target.closest("[data-select-version]");
-        if (edit) { appState.selectedDatasetId = edit.dataset.editDataset; renderAll(); }
-        if (version && version.dataset.selectVersion) { appState.selectedDatasetVersionId = version.dataset.selectVersion; audit("Selected frozen Dataset Version."); }
-      });
-      $("#caseLibrary").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-toggle-case]");
-        if (!button) return;
-        const dataset = selectedDataset();
-        if (!dataset || dataset.status !== "draft") return;
-        const caseId = button.dataset.toggleCase;
-        if (dataset.draftCaseIds.includes(caseId)) dataset.draftCaseIds = dataset.draftCaseIds.filter((id) => id !== caseId);
-        else dataset.draftCaseIds.push(caseId);
-        audit(`Updated cases for dataset ${dataset.name}.`);
-      });
-
-      $("#newExperiment").addEventListener("click", newExperiment);
-      $("#saveExperiment").addEventListener("click", saveExperiment);
-      $("#duplicateExperiment").addEventListener("click", duplicateExperiment);
-      $("#deleteExperiment").addEventListener("click", deleteExperiment);
-      $("#runExperiment").addEventListener("click", () => { navigate("runs"); startRuns(); });
-      $("#experimentRows").addEventListener("click", (event) => {
-        const id = event.target.closest("[data-edit-experiment], [data-use-experiment]")?.dataset.editExperiment || event.target.closest("[data-use-experiment]")?.dataset.useExperiment;
-        if (id) { appState.selectedExperimentId = id; appState.selectedComparisonId = null; renderAll(); }
-      });
-
-      $("#startRuns").addEventListener("click", startRuns);
-      $("#rerunFailed").addEventListener("click", () => showToast("当前 demo 没有 failed run；可用单条 Rerun 查看 attempt 行为。"));
-      $("#cancelExperiment").addEventListener("click", cancelExperiment);
-      $("#runRows").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-rerun]");
-        if (button) rerunRun(button.dataset.rerun);
-      });
-
-      $("#reviewList").addEventListener("click", (event) => {
-        const button = event.target.closest("[data-select-comparison]");
-        if (button) { appState.selectedComparisonId = button.dataset.selectComparison; renderAll(); }
-      });
-      $("#submitReview").addEventListener("click", submitReview);
-      $("#nextReview").addEventListener("click", selectNextReview);
-      $("#reviewDecision").addEventListener("change", () => {
-        const decision = $("#reviewDecision").value;
-        if (decision === "passed") $("#reviewComment").value = "Candidate satisfies acceptance criteria and does not regress from baseline.";
-        if (decision === "failed") $("#reviewComment").value = "";
-        if (decision === "not_sure") $("#reviewComment").value = "";
-        if (decision === "skipped") $("#skipReason").value = "";
-      });
-
-      $("#generateReport").addEventListener("click", generateReport);
-      $("#saveException").addEventListener("click", saveException);
-      $("#deleteDraftReport").addEventListener("click", deleteDraftReport);
-    }
-
-    bindEvents();
-    renderAll();
+    renderExperiments();
+    renderCases();
+    loadCase(0);
+    renderWorkflow();
   </script>
 </body>
 </html>
